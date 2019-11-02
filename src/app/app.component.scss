@@ -6,3 +6,12 @@ button {
     background-color: rgb(225, 225, 225);
     margin: 5px;
 }
+
+::ng-deep button {
+    margin: 0px 5px !important;
+    background: #e1e1e1;
+}
+
+::ng-deep h2 {
+    margin-left: 5px;
+}
