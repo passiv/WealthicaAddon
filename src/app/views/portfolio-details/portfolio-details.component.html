@@ -1,0 +1,23 @@
+<h2>Portfolio Details - {{portfolio?.portfolioName}}</h2>
+<p>
+    <button class="btn btn-default" (click)="portfolioOverview()">Back</button>
+    <button class="btn btn-default" (click)="editPortfolio()">Edit Portfolio</button>
+    <button class="btn btn-default" (click)="tradesNeeded()">Generate Trades</button>
+    <button class="btn btn-danger" (click)="onDelete()">Delete Portfolio</button>
+
+</p>
+
+<ul aria-label="Portfolio Components: " class="ticker-list">
+    <li *ngFor="let component of portfolio.components" style="list-style-type:none">
+        {{component.symbol}} - {{formatPercent(component.percentOfPortfolio)}}%
+    </li>
+    <li *ngIf="percentCash > 0" style="list-style-type:none">Cash - {{percentCash.toFixed(1)}}%</li>
+</ul>
+
+<div *ngIf="portfolio !== null" class="pie-chart">
+    <canvas baseChart
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [chartType]="pieChartType">
+    </canvas>
+</div>

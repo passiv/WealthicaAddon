@@ -1,0 +1,5 @@
+<h2>Portfolios:</h2>
+<p *ngFor="let portfolio of portfolios">
+    <button style="clear: both;" (click)="viewPortfolio(portfolio)" class="btn btn-default">{{portfolio.portfolioName}}</button>
+</p>
+<button style="clear: both;" (click)="newPortfolio()" class="btn btn-default"><i class="fas fa-plus"></i> Create Portfolio</button>
