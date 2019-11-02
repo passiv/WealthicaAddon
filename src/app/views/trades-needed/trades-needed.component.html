@@ -1,6 +1,6 @@
 <h2>Trades - {{portfolio?.portfolioName}}</h2>
 <p>
-    <button class="btn btn-default" (click)="portfolioDetails()">Done</button>
+    <button mat-flat-button style="background: #E1E1E1 !important" (click)="portfolioDetails()">Done</button>
 </p>
 
 <div style="font-size: 18px;">Cash in account: ${{cash.toFixed(2)}}</div>
@@ -15,7 +15,7 @@
 
 <mat-checkbox [(ngModel)]="buyOnly">Buy only</mat-checkbox><br>
 
-<button (click)="refreshTradesNeeded()" class="btn btn-default" style="float: left;">Refresh trades</button>
+<button mat-flat-button color="primary" (click)="refreshTradesNeeded()" style="float: left;">Refresh trades</button>
 <mat-spinner [diameter]="40" style="float: left;" *ngIf="loading"></mat-spinner>
 <br>
 

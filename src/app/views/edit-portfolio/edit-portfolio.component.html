@@ -1,8 +1,8 @@
 <h2>Edit Portfolio - {{portfolio?.portfolioName}}</h2>
 
 <p>
-    <button (click)="onCancel()" class="btn btn-danger">Cancel</button>
-    <button (click)="onSave()" [disabled]="!validAllocation()" class="btn btn-primary">Save</button>
+    <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!validAllocation()" >Save</button>
 </p>
 <div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
 
