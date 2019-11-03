@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
-      if ((this.addonOptions.institutionsFilter as string).includes(institution.id)) {
+      if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
         institution.investments.forEach((investment: WealthicaInvestment) => {
           if (investment.currency === 'cad') {
             this.tradesNeededComponent.cashCAD += investment.cash;
