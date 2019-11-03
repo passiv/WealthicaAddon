@@ -53,7 +53,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('Error:<br><code>' + err + '</code>');
       });
       this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
-        this.tradesNeededComponent.cash = (response as WealthicaInstitution[])[0].cash;
+        const institutions = (response as WealthicaInstitution[]);
+        this.setCash(institutions);
       }).catch((err) => {
         console.log('Error:<br><code>' + err + '</code>');
       });
@@ -91,6 +92,20 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.portfolioOverviewComponent.portfolio = portfolio;
     }
     this.syncPortfolios(this.portfolioOverviewComponent.portfolio);
+  }
+
+  setCash(institutions: WealthicaInstitution[]) {
+    institutions.forEach(institution => {
+      institution.investments.forEach((investment: WealthicaInvestment) => {
+        if (investment.currency === 'cad') {
+          this.tradesNeededComponent.cashCAD += investment.cash;
+        } else if (investment.currency === 'usd') {
+          this.tradesNeededComponent.cashUSD += investment.cash;
+        } else {
+          this.tradesNeededComponent.cashOther += investment.cash;
+        }
+      });
+    });
   }
 
   onPortfolioSave(portfolio: PortfolioTemplate) {

@@ -12,9 +12,12 @@ export class TradesNeededComponent implements OnInit {
 
   portfolio: PortfolioTemplate;
   currentView: WidgetView;
-  cash = 0;
+  cashCAD = 0;
+  cashUSD = 0;
+  cashOther = 0;
   buyOnly = false;
-  specificCash = 0;
+  specificCashCAD = 0;
+  specificCashUSD = 0;
   loading = false;
 
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
@@ -65,10 +68,13 @@ export class TradesNeededComponent implements OnInit {
         positions.push(new PassivPosition(component.symbol, component.sharesOwned));
         targets.push(new PassivTarget(component.symbol, component.percentOfPortfolio * 100));
       });
-      if (this.specificCash === 0) {
-        balances.push(new PassivBalance('cad', this.cash));
+      if (this.specificCashCAD + this.specificCashUSD === 0) {
+        balances.push(new PassivBalance('cad', this.cashCAD));
+        balances.push(new PassivBalance('usd', this.cashUSD));
       } else {
-        balances.push(new PassivBalance('cad', this.specificCash));
+        balances.push(new PassivBalance('cad', this.specificCashCAD));
+        balances.push(new PassivBalance('usd', this.specificCashUSD));
+
       }
       this.passivService.getTrades(new PassivTradeRequest(positions, balances, targets, this.buyOnly))
       .subscribe(tradeResponse => {

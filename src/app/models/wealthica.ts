@@ -34,16 +34,12 @@ export class WealthicaSecurity {
 }
 
 export class WealthicaInvestment {
-    institution: string;
-    investment: string;
-    quantitynumber;
-    book_valuenumber;
-    market_valuenumber;
+    name: string;
+    _id: string;
+    cash: number;
     currency: string;
-    valuenumber;
-    gain_percentnumber;
-    gain_currency_amountnumber;
-    gain_amountnumber;
+    registered: boolean;
+    value: number;
 }
 
 export class WealthicaInstitution {
@@ -56,7 +52,7 @@ export class WealthicaInstitution {
     sync_date: string;
     sync_transactions: boolean;
     sync_documents: boolean;
-    investments: object;
+    investments: object[];
     book_value : number;
     market_value: number;
     value: number;

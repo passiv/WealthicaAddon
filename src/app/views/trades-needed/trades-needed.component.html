@@ -3,14 +3,21 @@
     <button mat-flat-button style="background: #E1E1E1 !important" (click)="portfolioDetails()">Done</button>
 </p>
 
-<div style="font-size: 18px;">Cash in account: ${{cash.toFixed(2)}}</div>
+<div style="font-size: 18px;" *ngIf="cashCAD > 0">Cash in account (CAD): ${{cashCAD.toFixed(2)}}</div>
+<div style="font-size: 18px;" *ngIf="cashUSD > 0">Cash in account (USD): ${{cashUSD.toFixed(2)}}</div>
 
-<div style="width:400px;" class="input-group mb-3">
-    <span style="font-size: 18px;">Or specify amount here:&nbsp;</span>
+<span style="font-size: 18px;">Or specify amount here:&nbsp;</span>
+<div style="width:140px;" class="input-group mb-3">
     <div class="input-group-prepend">
-        <span class="input-group-text">$</span>
+        <span class="input-group-text">CAD $</span>
     </div>
-    <input type="number" min="0" max="100" class="form-control" [(ngModel)]="specificCash">
+    <input type="number" min="0" max="100" class="form-control" [(ngModel)]="specificCashCAD">
+</div>
+<div style="width:140px;" class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text">USD $</span>
+    </div>
+    <input type="number" min="0" max="100" class="form-control" [(ngModel)]="specificCashUSD">
 </div>
 
 <mat-checkbox [(ngModel)]="buyOnly">Buy only</mat-checkbox><br>
