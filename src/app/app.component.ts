@@ -12,6 +12,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   currentView = WidgetView.PortfolioOverview;
   portfolio: PortfolioTemplate;
+  result = '';
 
   addon = new wealth.Addon({
     // (optional) The 'id' of the add-on / widget.
@@ -34,7 +35,28 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.initializeWealthicaAddon();
+  }
+
+  initializeWealthicaAddon() {
     this.addon.on('init', (options) => {
+      this.refreshWealthicaData(options);
+    });
+
+    this.addon.on('update', (options) => {
+      console.log('update');
+      this.clearData();
+      this.refreshWealthicaData(options);
+    });
+
+    this.addon.on('reload', (options) => {
+      console.log('reload');
+      this.clearData();
+      this.refreshWealthicaData(options);
+    });
+  }
+
+  refreshWealthicaData(options: object) {
       // {
       //   fromDate: '2018-01-01',
       //   toDate: '2018-04-30',
@@ -58,8 +80,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       }).catch((err) => {
         console.log('Error:<br><code>' + err + '</code>');
       });
-    });
+  }
 
+  clearData() {
+    this.tradesNeededComponent.cashCAD = 0;
+    this.tradesNeededComponent.cashUSD = 0;
   }
 
   ngAfterViewInit() {
@@ -121,6 +146,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   updateSharesOwned() {
     if (this.positions !== null) {
       this.portfolio.components.forEach(component => {
+        component.sharesOwned = 0;
         this.positions.forEach(position => {
           if (position.security.currency.toLowerCase() === 'cad') {
             if (component.symbol === position.security.symbol + '.TO') {
