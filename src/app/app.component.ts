@@ -38,6 +38,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.initializeWealthicaAddon();
   }
 
+  ngAfterViewInit() {
+    this.initializeViews();
+    this.cdr.detectChanges();
+  }
+
   initializeWealthicaAddon() {
     this.addon.on('init', (options) => {
       this.refreshWealthicaData(options);
@@ -87,11 +92,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tradesNeededComponent.cashUSD = 0;
   }
 
-  ngAfterViewInit() {
-    this.initializeViews();
-    this.cdr.detectChanges();
-  }
-
   saveToWealthica() {
     const wealicaData = { portfolios: this.portfolioOverviewComponent.portfolios };
     this.addon.saveData(wealicaData).then(() => {
@@ -121,15 +121,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
-      institution.investments.forEach((investment: WealthicaInvestment) => {
-        if (investment.currency === 'cad') {
-          this.tradesNeededComponent.cashCAD += investment.cash;
-        } else if (investment.currency === 'usd') {
-          this.tradesNeededComponent.cashUSD += investment.cash;
-        } else {
-          this.tradesNeededComponent.cashOther += investment.cash;
-        }
-      });
+      if ((this.addonOptions.institutionsFilter as string).includes(institution.id)) {
+        institution.investments.forEach((investment: WealthicaInvestment) => {
+          if (investment.currency === 'cad') {
+            this.tradesNeededComponent.cashCAD += investment.cash;
+          } else if (investment.currency === 'usd') {
+            this.tradesNeededComponent.cashUSD += investment.cash;
+          } else {
+            this.tradesNeededComponent.cashOther += investment.cash;
+          }
+        });
+      }
     });
   }
 
