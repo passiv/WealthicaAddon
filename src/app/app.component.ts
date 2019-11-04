@@ -203,22 +203,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  switchViewIfNeeded() {
-    if (this.currentView !== this.portfolioDetailsComponent.currentView) {
-      this.updateCurrentView(this.portfolioDetailsComponent.currentView);
-    }
-    if (this.currentView !== this.portfolioOverviewComponent.currentView) {
-      this.updateCurrentView(this.portfolioOverviewComponent.currentView);
-    }
-    if (this.currentView !== this.editPortfolioComponent.currentView) {
-      this.portfolioDetailsComponent.updatePiechart();
-      this.updateCurrentView(this.editPortfolioComponent.currentView);
-    }
-    if (this.currentView !== this.tradesNeededComponent.currentView) {
-      this.updateCurrentView(this.tradesNeededComponent.currentView);
-    }
-  }
-
   switchView(view: WidgetView) {
     this.updateCurrentView(view);
   }
