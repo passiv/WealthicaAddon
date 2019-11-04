@@ -163,7 +163,6 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         });
       });
-      this.tradesNeededComponent.refreshTradesNeeded();
     }
   }
 
@@ -248,6 +247,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onSwitchView(view: WidgetView) {
+    if (view === WidgetView.TradesNeeded) {
+      this.tradesNeededComponent.refreshTradesNeeded();
+    }
     this.switchView(view);
   }
 }
