@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { PortfolioTemplate, PortfolioComponent, PassivPosition, PassivTarget, PassivCurrency, PassivBalance, PassivTradeRequest, PassivTradeResponse, PassivTrade } from '../../models';
 import { WidgetView } from '../widget-view';
 import { PassivService } from 'src/app/services/passiv.service';
@@ -19,10 +19,12 @@ export class TradesNeededComponent implements OnInit {
   specificCashCAD = 0;
   specificCashUSD = 0;
   loading = false;
+  areSellActions = false;
+  areBuyActions = false;
 
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
 
-  constructor(private passivService: PassivService) { }
+  constructor(private passivService: PassivService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
 
@@ -55,7 +57,35 @@ export class TradesNeededComponent implements OnInit {
     this.refreshTradesNeeded();
   }
 
+  checkAreSellActions() {
+    if (this.portfolio === null || this.portfolio === undefined) {
+      return false;
+    }
+    let result = false;
+    this.portfolio.components.forEach(component => {
+      if (component.isSellAction()) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
+  checkAreBuyActions() {
+    if (this.portfolio === null || this.portfolio === undefined) {
+      console.log(this.portfolio);
+      return false;
+    }
+    let result = false;
+    this.portfolio.components.forEach(component => {
+      if (component.isBuyAction()) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
   refreshTradesNeeded() {
+    this.resetActionBooleans();
     this.loading = true;
     this.portfolio.components.forEach(component => {
       component.adjustmentUnits = 0;
@@ -87,9 +117,20 @@ export class TradesNeededComponent implements OnInit {
             }
           });
         });
+        this.setActionBooleans();
         this.loading = false;
       });
     }
+  }
+
+  resetActionBooleans() {
+    this.areSellActions = false;
+    this.areBuyActions = false;
+  }
+
+  setActionBooleans() {
+    this.areSellActions = this.checkAreSellActions();
+    this.areBuyActions = this.checkAreBuyActions();
   }
 
   portfolioDetails() {
