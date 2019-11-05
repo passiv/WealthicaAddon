@@ -116,7 +116,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.portfolioOverviewComponent.portfolios.push(portfolio);
       this.portfolioOverviewComponent.portfolio = portfolio;
     }
-    this.syncPortfolios(this.portfolioOverviewComponent.portfolio);
+    if (this.portfolio === null || this.portfolio === undefined) {
+      this.syncPortfolios(this.portfolioOverviewComponent.portfolio);
+    }
   }
 
   setCash(institutions: WealthicaInstitution[]) {
@@ -142,7 +144,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onEditCancel(restoredPortfolio: PortfolioTemplate) {
-    console.log(restoredPortfolio);
     this.syncPortfolios(restoredPortfolio);
   }
 
