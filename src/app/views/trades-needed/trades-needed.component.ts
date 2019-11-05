@@ -87,6 +87,8 @@ export class TradesNeededComponent implements OnInit {
   refreshTradesNeeded() {
     this.resetActionBooleans();
     this.loading = true;
+    // Needed to update loading variable when accounts are filtered
+    this.cdr.detectChanges();
     this.portfolio.components.forEach(component => {
       component.adjustmentUnits = 0;
     });
@@ -119,6 +121,7 @@ export class TradesNeededComponent implements OnInit {
         });
         this.setActionBooleans();
         this.loading = false;
+        this.cdr.detectChanges();
       });
     }
   }

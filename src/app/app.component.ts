@@ -133,6 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
       }
     });
+    this.tradesNeededComponent.refreshTradesNeeded();
   }
 
   onPortfolioSave(portfolio: PortfolioTemplate) {
