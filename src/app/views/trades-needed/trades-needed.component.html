@@ -5,6 +5,8 @@
 
 <div style="font-size: 18px;" *ngIf="cashCAD > 0">Cash in account (CAD): ${{cashCAD.toFixed(2)}}</div>
 <div style="font-size: 18px;" *ngIf="cashUSD > 0">Cash in account (USD): ${{cashUSD.toFixed(2)}}</div>
+<div style="font-size: 18px;" *ngIf="!loading && cashUSD + cashCAD === 0">No cash in your account(s)</div>
+
 
 <!-- <span style="font-size: 18px;">Or specify amount here:&nbsp;</span>
 <div style="width:140px;" class="input-group mb-3">
