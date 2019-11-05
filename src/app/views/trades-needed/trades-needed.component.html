@@ -35,7 +35,7 @@
     </ul>
 </div>
 
-<div *ngIf="areBuyActions">
+<div [hidden]="!areBuyActions">
     <h4>Buy:</h4>
     <ul style="list-style: none;">
         <li *ngFor="let component of portfolio?.components">
