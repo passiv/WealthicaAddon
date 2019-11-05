@@ -72,7 +72,6 @@ export class TradesNeededComponent implements OnInit {
 
   checkAreBuyActions() {
     if (this.portfolio === null || this.portfolio === undefined) {
-      console.log(this.portfolio);
       return false;
     }
     let result = false;
