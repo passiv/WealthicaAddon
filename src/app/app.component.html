@@ -1,8 +1,8 @@
 <div class="appContainer">
 
 	<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!overviewView()"></app-portfolio-overview>
-	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
-	<app-portfolio-details (switchView)="onSwitchView($event)" (deletePortfolio)="onDeletePortfolio($event)" [hidden]="!detailsView()"></app-portfolio-details>
+	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (deletePortfolio)="onDeletePortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
+	<app-portfolio-details (switchView)="onSwitchView($event)" [hidden]="!detailsView()"></app-portfolio-details>
 	<app-trades-needed (switchView)="onSwitchView($event)" [hidden]="!tradesView()"></app-trades-needed>
 
 {{result}}
