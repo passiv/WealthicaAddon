@@ -21,7 +21,7 @@ export class PortfolioOverviewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
   viewPortfolio(portfolio: PortfolioTemplate) {
@@ -37,6 +37,10 @@ export class PortfolioOverviewComponent implements OnInit {
     this.portfolios.push(this.portfolio);
     this.switchPortfolio.emit(this.portfolio);
     this.switchView.emit(WidgetView.EditPortfolio);
+  }
+
+  importPortfolio() {
+
   }
 
 }
