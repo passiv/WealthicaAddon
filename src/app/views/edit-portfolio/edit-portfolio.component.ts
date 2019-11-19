@@ -27,9 +27,14 @@ export class EditPortfolioComponent implements OnInit {
 
   onCancel() {
     const restoredPortfolio = this.loadFromSaveState();
-    this.portfolio = restoredPortfolio;
-    this.cancel.emit(restoredPortfolio);
-    this.switchView.emit(WidgetView.PortfolioDetails);
+    if (restoredPortfolio === null) { // User canceled import portfolio
+      this.cancel.emit(null);
+      this.switchView.emit(WidgetView.PortfolioOverview);
+    } else {
+      this.portfolio = restoredPortfolio;
+      this.cancel.emit(restoredPortfolio);
+      this.switchView.emit(WidgetView.PortfolioDetails);
+    }
   }
 
   onSave() {
@@ -41,6 +46,9 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   loadFromSaveState() {
+    if (this.saveState === null) {
+      return null;
+    }
     const restoredPort = new PortfolioTemplate();
     restoredPort.portfolioName = this.saveState.portfolioName;
     restoredPort.id = this.saveState.id;

@@ -144,7 +144,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onEditCancel(restoredPortfolio: PortfolioTemplate) {
-    this.syncPortfolios(restoredPortfolio);
+    if (restoredPortfolio === null) {
+      this.loadFromWealthica();
+    } else {
+      this.syncPortfolios(restoredPortfolio);
+    }
   }
 
   updateSharesOwned() {
@@ -253,5 +257,29 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.tradesNeededComponent.refreshTradesNeeded();
     }
     this.switchView(view);
+  }
+
+  onNewPortfolio() {
+    // Wipe save state so that new portfolio gets deleted if user cancels
+    this.editPortfolioComponent.saveState = null;
+  }
+
+  onImportPortfolio(portfolio: PortfolioTemplate) {
+    let totalPortfolioValue = this.tradesNeededComponent.cashCAD;
+    this.positions.forEach(position => {
+      totalPortfolioValue += position.market_value;
+    });
+
+    this.positions.forEach(position => {
+      const component = new PortfolioComponent(
+        position.security.symbol,
+        Math.round(position.market_value * 1000 / totalPortfolioValue) / 1000
+        );
+      portfolio.components.push(component);
+    });
+
+    this.syncPortfolios(portfolio);
+    this.editPortfolioComponent.saveState = null;
+    this.switchView(WidgetView.EditPortfolio);
   }
 }
