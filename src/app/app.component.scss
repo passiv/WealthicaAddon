@@ -1,17 +1,103 @@
-button {
-    outline: none !important;
-}
-
 .menu button {
-    background-color: rgb(225, 225, 225);
-    margin: 5px;
+  background-color: rgb(225, 225, 225);
+  margin: 5px;
 }
 
-::ng-deep button {
-    margin: 0px 5px !important;
-    background: #e1e1e1;
+::ng-deep button.primary {
+  background: #003BA2;
+  border: none;
+  color: #fff;
+  outline: none;
+  padding: 14px 20px;
+	border-radius: 4px;
+	&.save {
+		background: #04A287;
+	}
+}
+
+::ng-deep button.secondary {
+  background: #fff;
+  border: 2px solid #003BA2;
+  color: #003BA2;
+  outline: none;
+  padding: 12px 20px;
+  margin-right: 15px;
+	&:hover {
+		background: #003BA2;
+		color: #fff;
+	}
+}
+
+::ng-deep button.link {
+  background: none;
+  border: none;
+  color: #003BA2;
+  outline: none;
+  padding: 0;
+  margin-right: 20px;
+  i {
+  	margin-right: 4px;
+  }
+  &.back {
+  	text-transform: uppercase;
+  	font-weight: 700;
+  	margin-bottom: 10px;
+  }
+  &.delete {
+  	color: #383838;
+  	margin-left: 20px;
+  }
+}
+
+::ng-deep h1 {
+	color: #383838;
+  font-size: 36px;
+  font-weight: 600;
+	margin-bottom: 30px;
 }
 
 ::ng-deep h2 {
-    margin-left: 5px;
+	font-weight: 600;
+  font-size: 24px;
+  color: #04A287;
+  letter-spacing: -0.31px;
+  line-height: 34px;
+  padding: 25px 0px 5px;
+}
+
+::ng-deep label {
+	display: block;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: left;
+  color: #222125;
+  margin-bottom: 12px;
+}
+
+::ng-deep input[type="number"],
+::ng-deep input[type="text"] {
+	box-sizing: border-box;
+  font-size: 20px;
+  height: 38px;
+  margin-bottom: 20px;
+  -webkit-appearance: none;
+  padding: 25px;
+  border-radius: 0px;
+  outline: none;
+  background: rgb(255, 255, 255);
+  outline: none;
+  border: 2px solid #222125;
+}
+
+.appContainer {
+	box-shadow: 0px 3px 11px 0 rgba(119, 119, 119, 0.26);
+  border-radius: 25px;
+  background: #f2f4f5;
+  margin: 0 10px 20px;
+  padding: 30px 30px 40px;
+}
+
+::ng-deep .flex {
+	display: flex;
+	margin-bottom: 20px;
 }

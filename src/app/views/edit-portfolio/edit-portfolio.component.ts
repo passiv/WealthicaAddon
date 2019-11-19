@@ -18,6 +18,7 @@ export class EditPortfolioComponent implements OnInit {
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
+  @Output() deletePortfolio: EventEmitter<PortfolioTemplate> = new EventEmitter();
 
   constructor(private passivService: PassivService) { }
 
@@ -99,5 +100,9 @@ export class EditPortfolioComponent implements OnInit {
   deleteComponent(component: PortfolioComponent) {
     const indexToDelete = this.portfolio.components.indexOf(component);
     this.portfolio.components.splice(indexToDelete, 1);
+  }
+
+  onDelete() {
+    this.deletePortfolio.emit(this.portfolio);
   }
 }

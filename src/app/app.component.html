@@ -1,8 +1,14 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<div class="appContainer">
 
-<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!overviewView()"></app-portfolio-overview>
-<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
-<app-portfolio-details (switchView)="onSwitchView($event)" (deletePortfolio)="onDeletePortfolio($event)" [hidden]="!detailsView()"></app-portfolio-details>
-<app-trades-needed (switchView)="onSwitchView($event)" [hidden]="!tradesView()"></app-trades-needed>
+	<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!overviewView()"></app-portfolio-overview>
+	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
+	<app-portfolio-details (switchView)="onSwitchView($event)" (deletePortfolio)="onDeletePortfolio($event)" [hidden]="!detailsView()"></app-portfolio-details>
+	<app-trades-needed (switchView)="onSwitchView($event)" [hidden]="!tradesView()"></app-trades-needed>
 
 {{result}}
+
+	<div class="appFooter">
+		<img class="logo" src="assets/logo.svg" alt="passiv logo">
+	</div>
+
+</div>
