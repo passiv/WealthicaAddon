@@ -266,6 +266,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   onImportPortfolio(portfolio: PortfolioTemplate) {
     let totalPortfolioValue = this.tradesNeededComponent.cashCAD;
+    if (this.positions.length === 0) {
+      this.editPortfolioComponent.noImportData = true;
+    }
     this.positions.forEach(position => {
       totalPortfolioValue += position.market_value;
     });

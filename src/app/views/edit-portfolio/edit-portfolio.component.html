@@ -5,6 +5,7 @@
     <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!validAllocation()" >Save</button>
 </p>
 <div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
+<div class="alert alert-danger" *ngIf="noImportData">No securities available to be imported from selected account(s)</div>
 
 <table class="table40">
     <tr scope="row">
