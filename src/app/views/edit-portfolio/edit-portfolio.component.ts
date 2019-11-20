@@ -41,6 +41,14 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   onSave() {
+    // Remove empty components before saving
+    this.portfolio.components.forEach( c => {
+      console.log(c.percentOfPortfolio);
+    });
+    if (this.portfolio.components.length > 1) {
+      this.portfolio.components = this.portfolio.components.filter(c => c.symbol !== '' );
+    }
+
     // Update save state to new copy
     this.saveState = JSON.parse(JSON.stringify(this.portfolio)) as PortfolioTemplate;
 
@@ -116,5 +124,15 @@ export class EditPortfolioComponent implements OnInit {
 
   onDelete() {
     this.deletePortfolio.emit(this.portfolio);
+  }
+
+  percentCash() {
+    let percentCash = 100;
+    this.portfolio.components.forEach(component => {
+      if (component.symbol !== '') {
+        percentCash -= component.percentOfPortfolio * 100;
+      }
+    });
+    return percentCash;
   }
 }
