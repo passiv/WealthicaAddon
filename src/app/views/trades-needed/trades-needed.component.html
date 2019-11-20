@@ -1,12 +1,14 @@
-<h1>Trades - {{portfolio?.portfolioName}}</h1>
-<p>
-    <button mat-flat-button style="background: #E1E1E1 !important" (click)="portfolioDetails()">Done</button>
-</p>
-
-<div style="font-size: 18px;" *ngIf="cashCAD > 0">Cash in account (CAD): ${{cashCAD.toFixed(2)}}</div>
-<div style="font-size: 18px;" *ngIf="cashUSD > 0">Cash in account (USD): ${{cashUSD.toFixed(2)}}</div>
-<div style="font-size: 18px;" *ngIf="!loading && cashUSD + cashCAD === 0">No cash in your account(s)</div>
-
+<div class="flex">
+  <div>
+    <button class="link back" (click)="portfolioDetails()"><i class="fas fa-angle-left" wiid="C386"></i>Back</button>
+    <h1>Trades - {{portfolio?.portfolioName}}</h1>
+  </div>
+  <div>
+    <div class="cash" *ngIf="cashCAD > 0">Total Holdings (CAD) <span>${{cashCAD.toFixed(2)}}</span></div>
+    <div class="cash" *ngIf="cashUSD > 0">Total Holdings (USD) <span>${{cashUSD.toFixed(2)}}</span></div>
+    <div class="cash" *ngIf="!loading && cashUSD + cashCAD === 0">No cash in your account(s)</div>
+  </div>
+</div>
 
 <!-- <span style="font-size: 18px;">Or specify amount here:&nbsp;</span>
 <div style="width:140px;" class="input-group mb-3">
@@ -22,28 +24,29 @@
     <input type="number" min="0" max="100" class="form-control" [(ngModel)]="specificCashUSD">
 </div> -->
 
-<mat-checkbox [(ngModel)]="buyOnly">Buy only</mat-checkbox><br>
+<div class="actions">
+  <mat-checkbox [(ngModel)]="buyOnly">Buy only</mat-checkbox><br>
+  <button class="secondary" (click)="refreshTradesNeeded()"><i class="fas fa-sync-alt" wiid="C386"></i>Refresh trades</button>
+</div>
 
-<button mat-flat-button color="primary" (click)="refreshTradesNeeded()" style="float: left;">Refresh trades</button>
-<mat-spinner [diameter]="40" style="float: left;" *ngIf="loading"></mat-spinner>
-<br>
-<p></p>
+<mat-spinner class="spinner" [diameter]="40" *ngIf="loading"></mat-spinner>
+
 <div [hidden]="!areSellActions">
-    <h4 style="clear: both;">Sell:</h4>
-    <ul style="list-style: none;">
-        <li *ngFor="let component of portfolio?.components">
-            <span *ngIf="component?.isSellAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
-        </li>
-    </ul>
+  <h2>Sell:</h2>
+  <ul>
+    <li *ngFor="let component of portfolio?.components">
+      <span *ngIf="component?.isSellAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
+    </li>
+  </ul>
 </div>
 
 <div [hidden]="!areBuyActions">
-    <h4>Buy:</h4>
-    <ul style="list-style: none;">
-        <li *ngFor="let component of portfolio?.components">
-            <span *ngIf="component?.isBuyAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
-        </li>
-    </ul>
+  <h2>Buy:</h2>
+  <ul>
+    <li *ngFor="let component of portfolio?.components">
+      <span *ngIf="component?.isBuyAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
+    </li>
+  </ul>
 </div>
 
 <div>
@@ -52,25 +55,27 @@
     No trades are suggested with the current configuration
 </p>
 
-<table *ngIf="!loading" class="table table-striped table-sm" style="width: 60%">
-    <thead class="thead-light">
-        <tr>
-            <th>Symbol</th>
-            <th>Current Price</th>
-            <th># of Shares Owned</th>
-            <th>Adjustment of shares</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let component of portfolio?.components" scope="row">
-            <td>{{component?.symbol}}</td>
-            <td>${{component?.getPrice()}}</td>
-            <td>{{component?.sharesOwned}}</td>
-            <td>
-                <span *ngIf="component.isBuyAction()">+</span>
-                <span *ngIf="component.isSellAction()">-</span>
-                {{component?.adjustmentUnits}}
-            </td>
-        </tr>
-    </tbody>
+<table *ngIf="!loading">
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Current Price</th>
+      <th># of Shares Owned</th>
+      <th>Adjustment of shares</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let component of portfolio?.components" scope="row">
+      <td>{{component?.symbol}}</td>
+      <td>${{component?.getPrice()}}</td>
+      <td>{{component?.sharesOwned}}</td>
+      <td>
+        <span *ngIf="component.isBuyAction()">+</span>
+        <span *ngIf="component.isSellAction()">-</span>
+        {{component?.adjustmentUnits}}
+      </td>
+    </tr>
+  </tbody>
 </table>
+
+<button class="primary" (click)="portfolioDetails()">Done</button>
