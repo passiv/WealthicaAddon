@@ -19,4 +19,7 @@ export class SplashPageComponent implements OnInit {
     this.switchView.emit(WidgetView.PortfolioOverview);
   }
 
+  register() {
+  }
+
 }
