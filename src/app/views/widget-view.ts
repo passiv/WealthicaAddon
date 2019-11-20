@@ -1,6 +1,7 @@
 export enum WidgetView {
-    PortfolioOverview,
-    EditPortfolio,
-    PortfolioDetails,
-    TradesNeeded
+  SplashPage,
+  PortfolioOverview,
+  EditPortfolio,
+  PortfolioDetails,
+  TradesNeeded
 }

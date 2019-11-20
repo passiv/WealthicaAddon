@@ -14,6 +14,7 @@ export class EditPortfolioComponent implements OnInit {
   currentView: WidgetView;
   results: PassivSymbol[] = [];
   saveState: PortfolioTemplate;
+  noImportData = false;
 
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
@@ -27,25 +28,44 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   onCancel() {
+    this.noImportData = false;
     const restoredPortfolio = this.loadFromSaveState();
-    this.portfolio = restoredPortfolio;
-    this.cancel.emit(restoredPortfolio);
-    this.switchView.emit(WidgetView.PortfolioDetails);
+    if (restoredPortfolio === null) { // User canceled import portfolio
+      this.cancel.emit(null);
+      this.switchView.emit(WidgetView.PortfolioOverview);
+    } else {
+      this.portfolio = restoredPortfolio;
+      this.cancel.emit(restoredPortfolio);
+      this.switchView.emit(WidgetView.PortfolioDetails);
+    }
   }
 
   onSave() {
+    // Remove empty components before saving
+    this.portfolio.components.forEach( c => {
+      console.log(c.percentOfPortfolio);
+    });
+    if (this.portfolio.components.length > 1) {
+      this.portfolio.components = this.portfolio.components.filter(c => c.symbol !== '' );
+    }
+
     // Update save state to new copy
     this.saveState = JSON.parse(JSON.stringify(this.portfolio)) as PortfolioTemplate;
 
+    this.noImportData = false;
     this.save.emit(this.portfolio);
     this.switchView.emit(WidgetView.PortfolioDetails);
   }
 
   loadFromSaveState() {
+    if (this.saveState === null) {
+      return null;
+    }
     const restoredPort = new PortfolioTemplate();
     restoredPort.portfolioName = this.saveState.portfolioName;
     restoredPort.id = this.saveState.id;
     restoredPort.components = [];
+    // Make a copy of current portfoly object
     this.saveState.components.forEach((component: PortfolioComponent) => {
       const c = new PortfolioComponent(component.symbol, component.percentOfPortfolio);
       c.displayPercent = component.displayPercent;
@@ -94,6 +114,7 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   newComponent() {
+    this.noImportData = false;
     this.portfolio.components.push(new PortfolioComponent('', 0));
   }
 
@@ -104,5 +125,15 @@ export class EditPortfolioComponent implements OnInit {
 
   onDelete() {
     this.deletePortfolio.emit(this.portfolio);
+  }
+
+  percentCash() {
+    let percentCash = 100;
+    this.portfolio.components.forEach(component => {
+      if (component.symbol !== '') {
+        percentCash -= component.percentOfPortfolio * 100;
+      }
+    });
+    return percentCash;
   }
 }

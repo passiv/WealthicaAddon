@@ -2,45 +2,49 @@
 <h1>Edit {{portfolio?.portfolioName}}</h1>
 
 <div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
+<div class="alert alert-danger" *ngIf="noImportData">No securities available to be imported from selected account(s)
+</div>
 
-<div>
+<div class="input-group mb-3">
+  <label>Portfolio Name</label>
+  <input type="text" class="form-control field" [(ngModel)]="portfolio.portfolioName">
+</div>
 
-  <div class="input-group mb-3">
-    <label>Portfolio Name</label>
-    <input type="text" class="form-control field" [(ngModel)]="portfolio.portfolioName">
+<div class="actions">
+  <button class="save primary" (click)="onSave()" [disabled]="!validAllocation()">Save</button>
+  <button class="link delete" (click)="onDelete()"><i class="fas fa-times" wiid="C386"></i>Delete Portfolio</button>
+</div>
+
+Cash: {{percentCash().toFixed(2)}}%
+
+<div class="headingContainer">
+  <h2>Target Portfolio</h2>
+</div>
+<div class="securityTable">
+  <div class="columnHeadings flex">
+    <div>Security</div>
+    <div>Percent of Portfolio</div>
   </div>
 
-  <div class="actions">
-    <button class="save primary" (click)="onSave()" [disabled]="!validAllocation()" >Save</button>
-    <button class="link delete" (click)="onDelete()"><i class="fas fa-times" wiid="C386"></i>Delete Portfolio</button>
-  </div>
-
-  <div class="headingContainer">
-    <h2>Target Portfolio</h2>
-  </div>
-  <div class="securityTable">
-    <div class="columnHeadings flex">
-      <div>Security</div>
-      <div>Percent of Portfolio</div>
-    </div>
-
-    <div class="flex" *ngFor="let component of portfolio?.components">
-      <div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" [(ngModel)]="component.symbol" (keyup)="loadSuggestions(component)">
-        </div>
-        <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)" class="suggestion">{{result.symbol}} - {{result.description}}</div>
+  <div class="flex" *ngFor="let component of portfolio?.components">
+    <div>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="component.symbol" (keyup)="loadSuggestions(component)">
       </div>
-      <div>
-        <div class="percentContainer">
-          <div class="percentSymbol">
-            <span>%</span>
-          </div>
-          <input type="number" min="0" max="100" class="form-control" [(ngModel)]="component.displayPercent" (keyup)="onPercentChange(component)">
-        </div>
-      </div>
-      <div><button class="btn remove primary" (click)="deleteComponent(component)"><span class="fas fa-minus"></span></button></div>
+      <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)"
+        class="suggestion">{{result.symbol}} - {{result.description}}</div>
     </div>
-    <button class="primary" (click)="newComponent()"><span class="fas fa-plus"></span> Add Security</button>
+    <div>
+      <div class="percentContainer">
+        <div class="percentSymbol">
+          <span>%</span>
+        </div>
+        <input type="number" min="0" max="100" class="form-control" [(ngModel)]="component.displayPercent"
+          (keyup)="onPercentChange(component)">
+      </div>
+    </div>
+    <div><button class="btn remove primary" (click)="deleteComponent(component)"><span
+          class="fas fa-minus"></span></button></div>
   </div>
+  <button class="primary" (click)="newComponent()"><span class="fas fa-plus"></span> Add Security</button>
 </div>

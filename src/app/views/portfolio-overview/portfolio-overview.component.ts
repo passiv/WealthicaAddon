@@ -17,11 +17,13 @@ export class PortfolioOverviewComponent implements OnInit {
 
   @Output() switchPortfolio: EventEmitter<PortfolioTemplate> = new EventEmitter();
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
+  @Output() newPortfolio: EventEmitter<WidgetView> = new EventEmitter();
+  @Output() importPortfolio: EventEmitter<PortfolioTemplate> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
   viewPortfolio(portfolio: PortfolioTemplate) {
@@ -30,13 +32,28 @@ export class PortfolioOverviewComponent implements OnInit {
     this.switchView.emit(WidgetView.PortfolioDetails);
   }
 
-  newPortfolio() {
+  onNewPortfolio() {
     this.portfolio = new PortfolioTemplate();
     this.portfolio.portfolioName = 'New Portfolio';
     this.portfolio.components = [new PortfolioComponent('', 1)];
     this.portfolios.push(this.portfolio);
     this.switchPortfolio.emit(this.portfolio);
+    this.newPortfolio.emit(null);
     this.switchView.emit(WidgetView.EditPortfolio);
+  }
+
+  onImportPortfolio() {
+    this.portfolio = new PortfolioTemplate();
+    this.portfolio.portfolioName = 'Imported Portfolio';
+    this.portfolio.components = [];
+    this.portfolios.push(this.portfolio);
+    this.switchPortfolio.emit(this.portfolio);
+    this.importPortfolio.emit(this.portfolio);
+    this.switchView.emit(WidgetView.EditPortfolio);
+  }
+
+  splashPage() {
+    this.switchView.emit(WidgetView.SplashPage);
   }
 
 }

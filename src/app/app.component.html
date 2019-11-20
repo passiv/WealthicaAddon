@@ -4,12 +4,15 @@
 		<img class="logo" src="assets/logo.svg" alt="passiv logo">
 	</div>
 
-	<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!overviewView()"></app-portfolio-overview>
-	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
-	<app-portfolio-details (switchView)="onSwitchView($event)" (deletePortfolio)="onDeletePortfolio($event)" [hidden]="!detailsView()"></app-portfolio-details>
-	<app-trades-needed (switchView)="onSwitchView($event)" [hidden]="!tradesView()"></app-trades-needed>
+  <app-splash-page (switchView)="onSwitchView($event)" [hidden]="!splashView()"></app-splash-page>
 
-{{result}}
+	<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" (newPortfolio)="onNewPortfolio($event)" (importPortfolio)="onImportPortfolio($event)" [hidden]="!overviewView()"></app-portfolio-overview>
+
+	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (deletePortfolio)="onDeletePortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
+
+	<app-portfolio-details (switchView)="onSwitchView($event)" [hidden]="!detailsView()"></app-portfolio-details>
+
+	<app-trades-needed (switchView)="onSwitchView($event)" [hidden]="!tradesView()"></app-trades-needed>
 
 	<div class="appFooter">
 		<a href="getpassiv.com">&copy; getpassiv.com</a>

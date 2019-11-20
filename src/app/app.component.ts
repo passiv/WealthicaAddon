@@ -6,11 +6,11 @@ import * as wealth from '@wealthica/wealthica.js';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss','./header.component.scss']
+  styleUrls: ['./app.component.scss', './header.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  currentView = WidgetView.PortfolioOverview;
+  currentView = WidgetView.SplashPage;
   portfolio: PortfolioTemplate;
   result = '';
 
@@ -144,7 +144,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onEditCancel(restoredPortfolio: PortfolioTemplate) {
-    this.syncPortfolios(restoredPortfolio);
+    if (restoredPortfolio === null) {
+      this.loadFromWealthica();
+    } else {
+      this.syncPortfolios(restoredPortfolio);
+    }
   }
 
   updateSharesOwned() {
@@ -216,6 +220,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tradesNeededComponent.currentView = view;
   }
 
+  splashView() {
+    return this.currentView === WidgetView.SplashPage;
+  }
   overviewView() {
     return this.currentView === WidgetView.PortfolioOverview;
   }
@@ -253,5 +260,33 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.tradesNeededComponent.refreshTradesNeeded();
     }
     this.switchView(view);
+  }
+
+  onNewPortfolio($event) {
+    // Wipe save state so that new portfolio gets deleted if user cancels
+    this.editPortfolioComponent.saveState = null;
+  }
+
+  onImportPortfolio(portfolio: PortfolioTemplate) {
+    let totalPortfolioValue = this.tradesNeededComponent.cashCAD;
+    if (this.positions.length === 0) {
+      this.editPortfolioComponent.noImportData = true;
+    }
+    this.positions.forEach(position => {
+      totalPortfolioValue += position.market_value;
+    });
+
+    this.positions.forEach(position => {
+      const component = new PortfolioComponent(
+        position.security.symbol,
+        position.market_value  / totalPortfolioValue
+        );
+      component.displayPercent = parseFloat(((position.market_value  / totalPortfolioValue) * 100).toFixed(2));
+      portfolio.components.push(component);
+    });
+
+    this.syncPortfolios(portfolio);
+    this.editPortfolioComponent.saveState = null;
+    this.switchView(WidgetView.EditPortfolio);
   }
 }
