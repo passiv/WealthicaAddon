@@ -6,11 +6,11 @@ import * as wealth from '@wealthica/wealthica.js';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss','./header.component.scss']
+  styleUrls: ['./app.component.scss', './header.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  currentView = WidgetView.PortfolioOverview;
+  currentView = WidgetView.SplashPage;
   portfolio: PortfolioTemplate;
   result = '';
 
@@ -220,6 +220,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tradesNeededComponent.currentView = view;
   }
 
+  splashView() {
+    return this.currentView === WidgetView.SplashPage;
+  }
   overviewView() {
     return this.currentView === WidgetView.PortfolioOverview;
   }

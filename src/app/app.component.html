@@ -1,4 +1,5 @@
 <div class="appContainer">
+  <app-splash-page (switchView)="onSwitchView($event)" [hidden]="!splashView()"></app-splash-page>
 	<app-portfolio-overview (switchPortfolio)="onSwitchPortfolio($event)" (switchView)="onSwitchView($event)" (newPortfolio)="onNewPortfolio($event)" (importPortfolio)="onImportPortfolio($event)" [hidden]="!overviewView()"></app-portfolio-overview>
 	<app-edit-portfolio (save)="onPortfolioSave($event)" (cancel)="onEditCancel($event)" (deletePortfolio)="onDeletePortfolio($event)" (switchView)="onSwitchView($event)" [hidden]="!editView()"></app-edit-portfolio>
 	<app-portfolio-details (switchView)="onSwitchView($event)" [hidden]="!detailsView()"></app-portfolio-details>

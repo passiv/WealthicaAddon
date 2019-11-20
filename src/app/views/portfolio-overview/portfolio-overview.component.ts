@@ -52,4 +52,8 @@ export class PortfolioOverviewComponent implements OnInit {
     this.switchView.emit(WidgetView.EditPortfolio);
   }
 
+  splashPage() {
+    this.switchView.emit(WidgetView.SplashPage);
+  }
+
 }
