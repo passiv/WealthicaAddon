@@ -14,6 +14,7 @@ export class EditPortfolioComponent implements OnInit {
   currentView: WidgetView;
   results: PassivSymbol[] = [];
   saveState: PortfolioTemplate;
+  noImportData = false;
 
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
@@ -27,21 +28,31 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   onCancel() {
+    this.noImportData = false;
     const restoredPortfolio = this.loadFromSaveState();
-    this.portfolio = restoredPortfolio;
-    this.cancel.emit(restoredPortfolio);
-    this.switchView.emit(WidgetView.PortfolioDetails);
+    if (restoredPortfolio === null) { // User canceled import portfolio
+      this.cancel.emit(null);
+      this.switchView.emit(WidgetView.PortfolioOverview);
+    } else {
+      this.portfolio = restoredPortfolio;
+      this.cancel.emit(restoredPortfolio);
+      this.switchView.emit(WidgetView.PortfolioDetails);
+    }
   }
 
   onSave() {
     // Update save state to new copy
     this.saveState = JSON.parse(JSON.stringify(this.portfolio)) as PortfolioTemplate;
 
+    this.noImportData = false;
     this.save.emit(this.portfolio);
     this.switchView.emit(WidgetView.PortfolioDetails);
   }
 
   loadFromSaveState() {
+    if (this.saveState === null) {
+      return null;
+    }
     const restoredPort = new PortfolioTemplate();
     restoredPort.portfolioName = this.saveState.portfolioName;
     restoredPort.id = this.saveState.id;
@@ -94,6 +105,7 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   newComponent() {
+    this.noImportData = false;
     this.portfolio.components.push(new PortfolioComponent('', 0));
   }
 
