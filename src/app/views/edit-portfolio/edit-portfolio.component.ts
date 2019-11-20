@@ -65,6 +65,7 @@ export class EditPortfolioComponent implements OnInit {
     restoredPort.portfolioName = this.saveState.portfolioName;
     restoredPort.id = this.saveState.id;
     restoredPort.components = [];
+    // Make a copy of current portfoly object
     this.saveState.components.forEach((component: PortfolioComponent) => {
       const c = new PortfolioComponent(component.symbol, component.percentOfPortfolio);
       c.displayPercent = component.displayPercent;

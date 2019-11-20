@@ -276,8 +276,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.positions.forEach(position => {
       const component = new PortfolioComponent(
         position.security.symbol,
-        Math.round(position.market_value * 1000 / totalPortfolioValue) / 1000
+        position.market_value  / totalPortfolioValue
         );
+      component.displayPercent = parseFloat(((position.market_value  / totalPortfolioValue) * 100).toFixed(2));
       portfolio.components.push(component);
     });
 
