@@ -19,6 +19,7 @@ export class EditPortfolioComponent implements OnInit {
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
+  @Output() deletePortfolio: EventEmitter<PortfolioTemplate> = new EventEmitter();
 
   constructor(private passivService: PassivService) { }
 
@@ -40,6 +41,14 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   onSave() {
+    // Remove empty components before saving
+    this.portfolio.components.forEach( c => {
+      console.log(c.percentOfPortfolio);
+    });
+    if (this.portfolio.components.length > 1) {
+      this.portfolio.components = this.portfolio.components.filter(c => c.symbol !== '' );
+    }
+
     // Update save state to new copy
     this.saveState = JSON.parse(JSON.stringify(this.portfolio)) as PortfolioTemplate;
 
@@ -56,6 +65,7 @@ export class EditPortfolioComponent implements OnInit {
     restoredPort.portfolioName = this.saveState.portfolioName;
     restoredPort.id = this.saveState.id;
     restoredPort.components = [];
+    // Make a copy of current portfoly object
     this.saveState.components.forEach((component: PortfolioComponent) => {
       const c = new PortfolioComponent(component.symbol, component.percentOfPortfolio);
       c.displayPercent = component.displayPercent;
@@ -111,5 +121,19 @@ export class EditPortfolioComponent implements OnInit {
   deleteComponent(component: PortfolioComponent) {
     const indexToDelete = this.portfolio.components.indexOf(component);
     this.portfolio.components.splice(indexToDelete, 1);
+  }
+
+  onDelete() {
+    this.deletePortfolio.emit(this.portfolio);
+  }
+
+  percentCash() {
+    let percentCash = 100;
+    this.portfolio.components.forEach(component => {
+      if (component.symbol !== '') {
+        percentCash -= component.percentOfPortfolio * 100;
+      }
+    });
+    return percentCash;
   }
 }

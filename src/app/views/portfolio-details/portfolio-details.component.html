@@ -1,23 +1,23 @@
-<h2>Portfolio Details - {{portfolio?.portfolioName}}</h2>
-<p>
-    <button mat-flat-button style="background: #E1E1E1 !important" (click)="portfolioOverview()">Back</button>
-    <button mat-flat-button style="background: #E1E1E1 !important" (click)="editPortfolio()">Edit Portfolio</button>
-    <button mat-flat-button style="background: #E1E1E1 !important" (click)="tradesNeeded()">Generate Trades</button>
-    <button mat-flat-button color="warn" (click)="onDelete()">Delete Portfolio</button>
-
+<button class="back link" (click)="portfolioOverview()"><i class="fas fa-angle-left" wiid="C386"></i>Back</button>
+<h1>{{portfolio?.portfolioName}}</h1>
+<p class="actions">
+  <button class="link" (click)="editPortfolio()"><i class="fas fa-pen" wiid="C386"></i>Edit Portfolio</button>
 </p>
 
-<ul aria-label="Portfolio Components: " class="ticker-list">
+<div class="flex">
+  <ul aria-label="Portfolio Components: " class="ticker-list">
     <li *ngFor="let component of portfolio.components" style="list-style-type:none">
         {{component.symbol}} - {{formatPercent(component.percentOfPortfolio)}}%
     </li>
     <li *ngIf="percentCash > 0" style="list-style-type:none">Cash - {{percentCash.toFixed(1)}}%</li>
-</ul>
+  </ul>
 
-<div *ngIf="portfolio !== null" class="pie-chart">
+  <div *ngIf="portfolio !== null" class="pie-chart">
     <canvas baseChart
-        [data]="pieChartData"
-        [labels]="pieChartLabels"
-        [chartType]="pieChartType">
+      [data]="pieChartData"
+      [labels]="pieChartLabels"
+      [chartType]="pieChartType">
     </canvas>
+  </div>
 </div>
+<button class="primary" (click)="tradesNeeded()">Generate Trades</button>

@@ -1,0 +1,27 @@
+.logo {
+	max-width: 60px;
+}
+
+.appFooter {
+  margin: 40px -32px 0 -32px;
+	background: #2A2D34;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 500;
+	text-align: center;
+	padding: 20px 0;
+	border-radius: 0 0 6px 6px;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	a {
+		color: #fff;
+		text-decoration: none;
+	}
+}
+
+.appHeader {
+	padding: 20px 0 20px 18px;
+	margin: 0 -32px 30px -32px;
+  background: #f2f4f5;
+  border-radius: 6px 6px 0 0;
+}

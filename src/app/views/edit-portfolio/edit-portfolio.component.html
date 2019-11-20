@@ -1,49 +1,50 @@
-<h2>Edit Portfolio - {{portfolio?.portfolioName}}</h2>
+<button class="back link" (click)="onCancel()"><i class="fas fa-angle-left" wiid="C386"></i>Back</button>
+<h1>Edit {{portfolio?.portfolioName}}</h1>
 
-<p>
-    <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
-    <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!validAllocation()" >Save</button>
-</p>
 <div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
-<div class="alert alert-danger" *ngIf="noImportData">No securities available to be imported from selected account(s)</div>
+<div class="alert alert-danger" *ngIf="noImportData">No securities available to be imported from selected account(s)
+</div>
 
-<table class="table40">
-    <tr scope="row">
-        <td>Portfolio Name:</td>
-        <td>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control field" [(ngModel)]="portfolio.portfolioName">
-            </div>
-        </td>
-    </tr>
+<div class="input-group mb-3">
+  <label>Portfolio Name</label>
+  <input type="text" class="form-control field" [(ngModel)]="portfolio.portfolioName">
+</div>
 
-    <tr scope="row">
-        <td><b>Components:</b></td>
-    </tr>
+<div class="actions">
+  <button class="save primary" (click)="onSave()" [disabled]="!validAllocation()">Save</button>
+  <button class="link delete" (click)="onDelete()"><i class="fas fa-times" wiid="C386"></i>Delete Portfolio</button>
+</div>
 
-    <tr scope="row">
-        <td>Security</td>
-        <td>Percent of Portfolio</td>
-    </tr>
+Cash: {{percentCash().toFixed(2)}}%
 
-    <tr scope="row" *ngFor="let component of portfolio?.components">
-        <td>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" [(ngModel)]="component.symbol" (keyup)="loadSuggestions(component)">
-            </div>
-            <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)" class="suggestion">{{result.symbol}} - {{result.description}}</div>
-        </td>
-        <td style="vertical-align: top;">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">%</span>
-                </div>
-                <input type="number" min="0" max="100" class="form-control" [(ngModel)]="component.displayPercent" (keyup)="onPercentChange(component)">
-            </div>
-        </td>
-        <td style="vertical-align: top;"><button class="btn btn-danger" (click)="deleteComponent(component)"><span class="fas fa-minus"></span></button></td>
-    </tr>
-    <button class="btn btn-success" (click)="newComponent()"><span class="fas fa-plus"></span></button>
+<div class="headingContainer">
+  <h2>Target Portfolio</h2>
+</div>
+<div class="securityTable">
+  <div class="columnHeadings flex">
+    <div>Security</div>
+    <div>Percent of Portfolio</div>
+  </div>
 
-</table>
-<br>
+  <div class="flex" *ngFor="let component of portfolio?.components">
+    <div>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="component.symbol" (keyup)="loadSuggestions(component)">
+      </div>
+      <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)"
+        class="suggestion">{{result.symbol}} - {{result.description}}</div>
+    </div>
+    <div>
+      <div class="percentContainer">
+        <div class="percentSymbol">
+          <span>%</span>
+        </div>
+        <input type="number" min="0" max="100" class="form-control" [(ngModel)]="component.displayPercent"
+          (keyup)="onPercentChange(component)">
+      </div>
+    </div>
+    <div><button class="btn remove primary" (click)="deleteComponent(component)"><span
+          class="fas fa-minus"></span></button></div>
+  </div>
+  <button class="primary" (click)="newComponent()"><span class="fas fa-plus"></span> Add Security</button>
+</div>

@@ -13,6 +13,7 @@ import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { PortfolioOverviewComponent, EditPortfolioComponent, TradesNeededComponent, PortfolioDetailsComponent } from './views';
+import { SplashPageComponent } from './views/splash-page/splash-page.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { PortfolioOverviewComponent, EditPortfolioComponent, TradesNeededCompone
     PortfolioOverviewComponent,
     EditPortfolioComponent,
     TradesNeededComponent,
-    PortfolioDetailsComponent
+    PortfolioDetailsComponent,
+    SplashPageComponent
   ],
   imports: [
     BrowserModule,

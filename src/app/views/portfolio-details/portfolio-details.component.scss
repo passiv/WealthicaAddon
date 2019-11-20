@@ -1,11 +1,20 @@
 .pie-chart {
-    float: left;
-    width: 40%;
-  }
-  
+  width: 50%;
+}
+
 .ticker-list {
-    display: flex;
-    flex-direction: column;
-    float: left;
-    clear: both;
+  display: flex;
+  flex-direction: column;
+  clear: both;
+  line-height: 2;
+  font-size: 20px;
+}
+
+.actions {
+	margin-top: -10px;
+	margin-bottom: 35px;
+}
+
+.flex {
+	align-items: center;
 }

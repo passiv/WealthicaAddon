@@ -17,7 +17,6 @@ export class PortfolioDetailsComponent implements OnInit {
   percentCash = 100;
 
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
-  @Output() deletePortfolio: EventEmitter<PortfolioTemplate> = new EventEmitter();
 
   constructor() { }
 
@@ -56,9 +55,5 @@ export class PortfolioDetailsComponent implements OnInit {
 
   tradesNeeded() {
     this.switchView.emit(WidgetView.TradesNeeded);
-  }
-
-  onDelete() {
-    this.deletePortfolio.emit(this.portfolio);
   }
 }

@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsComponent, TradesNeededComponent, WidgetView } from './views';
+import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsComponent, TradesNeededComponent, WidgetView} from './views';
 import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaSecurity, WealthicaData, WealthicaInstitution } from './models';
 import * as wealth from '@wealthica/wealthica.js';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss', './header.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  currentView = WidgetView.PortfolioOverview;
+  currentView = WidgetView.SplashPage;
   portfolio: PortfolioTemplate;
   result = '';
 
@@ -220,6 +220,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tradesNeededComponent.currentView = view;
   }
 
+  splashView() {
+    return this.currentView === WidgetView.SplashPage;
+  }
   overviewView() {
     return this.currentView === WidgetView.PortfolioOverview;
   }
@@ -259,7 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.switchView(view);
   }
 
-  onNewPortfolio() {
+  onNewPortfolio($event) {
     // Wipe save state so that new portfolio gets deleted if user cancels
     this.editPortfolioComponent.saveState = null;
   }
@@ -276,8 +279,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.positions.forEach(position => {
       const component = new PortfolioComponent(
         position.security.symbol,
-        Math.round(position.market_value * 1000 / totalPortfolioValue) / 1000
+        position.market_value  / totalPortfolioValue
         );
+      component.displayPercent = parseFloat(((position.market_value  / totalPortfolioValue) * 100).toFixed(2));
       portfolio.components.push(component);
     });
 

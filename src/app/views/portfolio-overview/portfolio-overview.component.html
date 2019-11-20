@@ -1,10 +1,11 @@
-<h2>Portfolios:</h2>
-<p *ngFor="let portfolio of portfolios">
-    <button mat-flat-button style="background: #E1E1E1 !important; clear: both;" (click)="viewPortfolio(portfolio)">{{portfolio.portfolioName}}</button>
-</p>
-<p>
-  <button mat-flat-button style="background: #E1E1E1 !important; clear: both;" (click)="onNewPortfolio()"><i class="fas fa-plus"></i> Create Portfolio</button>
-</p>
-<p>
-  <button mat-flat-button style="background: #E1E1E1 !important; clear: both;" (click)="onImportPortfolio()"><i class="fas fa-arrow-alt-circle-down"></i> Import Portfolio From Accounts</button>
-</p>
+<div class="container">
+  <button class="back link" (click)="splashPage()"><i class="fas fa-angle-left" wiid="C386"></i>Back</button>
+	<h1>Portfolios</h1>
+	<div class="flex">
+		<p *ngFor="let portfolio of portfolios">
+		  <button class="secondary" (click)="viewPortfolio(portfolio)">{{portfolio.portfolioName}}</button>
+		</p>
+	</div>
+  <button class="primary" (click)="onNewPortfolio()"><i class="fas fa-plus"></i> Create Portfolio</button>
+  <button class="primary" (click)="onImportPortfolio()"><i class="fas fa-arrow-alt-circle-down"></i> Import Portfolio From Accounts</button>
+</div>

@@ -2,3 +2,34 @@
     background-color: lightgray;
     cursor: pointer;
 }
+
+.columnHeadings {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.securityTable {
+	.flex {
+		> div:first-of-type {
+			width: 30%;
+		}
+	}
+}
+
+.percentSymbol {
+	position: absolute;
+	left: 0;
+	bottom: 38px;
+  font-size: 19px;
+}
+
+.percentContainer {
+	position: relative;
+	padding-left: 20px;
+	margin-right: 20px;
+}
+
+.remove {
+	margin-top: 3px;
+
+}
