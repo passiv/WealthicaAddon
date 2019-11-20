@@ -262,7 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.switchView(view);
   }
 
-  onNewPortfolio() {
+  onNewPortfolio($event) {
     // Wipe save state so that new portfolio gets deleted if user cancels
     this.editPortfolioComponent.saveState = null;
   }
