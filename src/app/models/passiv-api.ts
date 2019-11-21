@@ -90,3 +90,9 @@ export class PassivCurrency {
         this.name = name;
     }
 }
+
+export class PassivCurrencyRate {
+  src: PassivCurrency;
+  dst: PassivCurrency;
+  exchange_rate: number;
+}

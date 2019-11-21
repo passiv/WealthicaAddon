@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsComponent, TradesNeededComponent, WidgetView} from './views';
-import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaData, WealthicaInstitution, PassivSymbol, PassivSymbolRequest } from './models';
+import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsComponent, TradesNeededComponent, WidgetView } from './views';
+import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaData, WealthicaInstitution, PassivSymbol, PassivSymbolRequest, PassivCurrencyRate } from './models';
 import * as wealth from '@wealthica/wealthica.js';
 import { PassivService } from './services/passiv.service';
 
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   currentView = WidgetView.SplashPage;
   portfolio: PortfolioTemplate;
-  result = '';
+  cadToUsd = 0;
 
   addon = new wealth.Addon({
     // (optional) The 'id' of the add-on / widget.
@@ -24,19 +24,20 @@ export class AppComponent implements OnInit, AfterViewInit {
   addonOptions;
   positions: WealthicaPosition[] = null;
 
-  @ViewChild(PortfolioOverviewComponent, {static: false})
-    portfolioOverviewComponent: PortfolioOverviewComponent;
-  @ViewChild(EditPortfolioComponent, {static: false})
-    editPortfolioComponent: EditPortfolioComponent;
-  @ViewChild(PortfolioDetailsComponent, {static: false})
-    portfolioDetailsComponent: PortfolioDetailsComponent;
-  @ViewChild(TradesNeededComponent, {static: false})
-    tradesNeededComponent: TradesNeededComponent;
+  @ViewChild(PortfolioOverviewComponent, { static: false })
+  portfolioOverviewComponent: PortfolioOverviewComponent;
+  @ViewChild(EditPortfolioComponent, { static: false })
+  editPortfolioComponent: EditPortfolioComponent;
+  @ViewChild(PortfolioDetailsComponent, { static: false })
+  portfolioDetailsComponent: PortfolioDetailsComponent;
+  @ViewChild(TradesNeededComponent, { static: false })
+  tradesNeededComponent: TradesNeededComponent;
 
   constructor(private cdr: ChangeDetectorRef, private passivService: PassivService) { }
 
   ngOnInit() {
     this.initializeWealthicaAddon();
+    this.setCadUsdExchangeRate();
   }
 
   ngAfterViewInit() {
@@ -63,29 +64,29 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   refreshWealthicaData(options: object) {
-      // {
-      //   fromDate: '2018-01-01',
-      //   toDate: '2018-04-30',
-      //   language: 'en',
-      //   privateMode: false,
-      //   data: { portfolios: [, , ] },
-      //   ...
-      // }
-      this.addonOptions = options;
-      this.loadFromWealthica();
-      this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
-        // this.result = JSON.stringify(response);
-        this.positions = response as WealthicaPosition[];
-        this.updateSharesOwned();
-      }).catch((err) => {
-        console.log('Error:<br><code>' + err + '</code>');
-      });
-      this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
-        const institutions = (response as WealthicaInstitution[]);
-        this.setCash(institutions);
-      }).catch((err) => {
-        console.log('Error:<br><code>' + err + '</code>');
-      });
+    // {
+    //   fromDate: '2018-01-01',
+    //   toDate: '2018-04-30',
+    //   language: 'en',
+    //   privateMode: false,
+    //   data: { portfolios: [, , ] },
+    //   ...
+    // }
+    this.addonOptions = options;
+    this.loadFromWealthica();
+    this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
+      // this.result = JSON.stringify(response);
+      this.positions = response as WealthicaPosition[];
+      this.updateSharesOwned();
+    }).catch((err) => {
+      console.log('Error:<br><code>' + err + '</code>');
+    });
+    this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
+      const institutions = (response as WealthicaInstitution[]);
+      this.setCash(institutions);
+    }).catch((err) => {
+      console.log('Error:<br><code>' + err + '</code>');
+    });
   }
 
   clearData() {
@@ -268,50 +269,109 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.editPortfolioComponent.saveState = null;
   }
 
+  setCadUsdExchangeRate() {
+    this.passivService.getCurrencies().subscribe(response => {
+      (response as PassivCurrencyRate[]).forEach(rate => {
+        if (rate.src.code.toLowerCase() === 'cad' && rate.dst.code.toLowerCase() === 'usd') {
+          this.cadToUsd = rate.exchange_rate;
+        }
+      });
+    });
+  }
+
+  cadToUsdRate() {
+    if (this.cadToUsd === 0) {
+      this.setCadUsdExchangeRate();
+      return 0.753; // Return in meantime
+    } else {
+      return this.cadToUsd;
+    }
+  }
+
+  isCadPosition(position: any) {
+    try {
+      if (position.security.currency.toLowerCase() === 'cad') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  isUsdPosition(position: any) {
+    try {
+      if (position.security.currency.toLowerCase() === 'usd') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
+  }
+
   onImportPortfolio(portfolio: PortfolioTemplate) {
-    let totalPortfolioValue = this.tradesNeededComponent.cashCAD;
+    let totalPortfolioValueUSD = this.tradesNeededComponent.cashCAD * this.cadToUsdRate();
+    totalPortfolioValueUSD += this.tradesNeededComponent.cashUSD;
     if (this.positions.length === 0) {
       this.editPortfolioComponent.noImportData = true;
     }
     this.positions.forEach(position => {
-      totalPortfolioValue += position.market_value;
-    });
-
-    this.positions.forEach(position => {
-      const component = new PortfolioComponent(
-        position.security.symbol,
-        position.market_value  / totalPortfolioValue
-        );
-      if (position.security.currency.toLowerCase() === 'cad') {
-        this.getCadSymbol(position.security.symbol).then(s => component.symbol = s);
+      if (this.isCadPosition(position)) {
+        totalPortfolioValueUSD += position.market_value * this.cadToUsdRate();
+      } else {
+        totalPortfolioValueUSD += position.market_value;
       }
-      component.displayPercent = parseFloat(((position.market_value  / totalPortfolioValue) * 100).toFixed(2));
-      portfolio.components.push(component);
     });
 
+    // Make sure passiv can find the security before adding
+    this.positions.forEach(position => {
+      let addImportedSecurity = false;
+      let symbolToAdd = position.security.symbol;
+      const request = new PassivSymbolRequest(symbolToAdd);
+      this.passivService.search(request).subscribe(response => {
+        if (this.isUsdPosition(position)) {
+          if ((response as PassivSymbol[]).map(r => r.symbol).includes(symbolToAdd)) {
+            addImportedSecurity = true;
+          }
+        } else if (this.isCadPosition(position)) {
+          symbolToAdd = this.getCadSymbol(symbolToAdd, response as PassivSymbol[]);
+          if (symbolToAdd !== null) {
+            addImportedSecurity = true;
+          }
+        }
+        if (addImportedSecurity) {
+          let percentOfTotal = position.market_value / totalPortfolioValueUSD;
+          if (this.isCadPosition(position)) {
+            percentOfTotal = percentOfTotal * this.cadToUsdRate();
+          }
+          const component = new PortfolioComponent(
+            symbolToAdd,
+            percentOfTotal // currency conversion neeeded
+          );
+          component.displayPercent = parseFloat((percentOfTotal * 100).toFixed(2));
+          portfolio.components.push(component);
+        }
+      });
+    });
+    // Probably want these to only happen after above finishes
     this.syncPortfolios(portfolio);
     this.editPortfolioComponent.saveState = null;
     this.switchView(WidgetView.EditPortfolio);
   }
 
-  getCadSymbol(symbol: string): Promise<string> {
-    return new Promise<string>(resolve => {
-      const request = new PassivSymbolRequest(symbol);
-      this.passivService.search(request).subscribe(response => {
-        (response as PassivSymbol[]).forEach(s => {
-          if (s.currency.code.toLowerCase() === 'cad') {
-            if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.to') {
-              resolve(s.symbol);
-            } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.vn') {
-              resolve(s.symbol);
-            } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.cn') {
-              resolve(s.symbol);
-            }
-          }
-        });
-      }, (error => {
-        resolve(symbol);
-      }));
+  getCadSymbol(symbol: string, passivSymbols: PassivSymbol[]): string {
+    let cadSymbol = null;
+    passivSymbols.forEach(s => {
+      if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.to') {
+        cadSymbol =  s.symbol;
+      } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.vn') {
+        cadSymbol = s.symbol;
+      } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.cn') {
+        cadSymbol = s.symbol;
+      }
     });
+    return cadSymbol;
   }
+
 }

@@ -16,4 +16,8 @@ export class PassivService {
   getTrades(request: PassivTradeRequest) {
     return this.http.post('https://getpassiv.com/api/v1/embeddedTrades', request);
   }
+
+  getCurrencies() {
+    return this.http.get('https://getpassiv.com/api/v1/currencies/rates');
+  }
 }
