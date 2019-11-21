@@ -67,7 +67,7 @@
   <tbody>
     <tr *ngFor="let component of portfolio?.components" scope="row">
       <td>{{component?.symbol}}</td>
-      <td>${{component?.getPrice()}}</td>
+      <td><span *ngIf="component?.getPrice() !== ''">$</span>{{component?.getPrice()}}</td>
       <td>{{component?.sharesOwned}}</td>
       <td>
         <span *ngIf="component.isBuyAction()">+</span>
