@@ -76,8 +76,7 @@ export class EditPortfolioComponent implements OnInit {
   }
 
   loadSuggestions(component: PortfolioComponent) {
-    const request = new PassivSymbolRequest();
-    request.substring = component.symbol;
+    const request = new PassivSymbolRequest(component.symbol);
     this.passivService.search(request).subscribe(response => {
       component.suggestedSymbols = (response as PassivSymbol[]);
     });

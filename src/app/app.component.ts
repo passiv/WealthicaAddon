@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsComponent, TradesNeededComponent, WidgetView} from './views';
-import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaSecurity, WealthicaData, WealthicaInstitution } from './models';
+import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaData, WealthicaInstitution, PassivSymbol, PassivSymbolRequest } from './models';
 import * as wealth from '@wealthica/wealthica.js';
+import { PassivService } from './services/passiv.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(TradesNeededComponent, {static: false})
     tradesNeededComponent: TradesNeededComponent;
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef, private passivService: PassivService) { }
 
   ngOnInit() {
     this.initializeWealthicaAddon();
@@ -281,6 +282,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         position.security.symbol,
         position.market_value  / totalPortfolioValue
         );
+      if (position.security.currency.toLowerCase() === 'cad') {
+        this.getCadSymbol(position.security.symbol).then(s => component.symbol = s);
+      }
       component.displayPercent = parseFloat(((position.market_value  / totalPortfolioValue) * 100).toFixed(2));
       portfolio.components.push(component);
     });
@@ -288,5 +292,26 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.syncPortfolios(portfolio);
     this.editPortfolioComponent.saveState = null;
     this.switchView(WidgetView.EditPortfolio);
+  }
+
+  getCadSymbol(symbol: string): Promise<string> {
+    return new Promise<string>(resolve => {
+      const request = new PassivSymbolRequest(symbol);
+      this.passivService.search(request).subscribe(response => {
+        (response as PassivSymbol[]).forEach(s => {
+          if (s.currency.code.toLowerCase() === 'cad') {
+            if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.to') {
+              resolve(s.symbol);
+            } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.vn') {
+              resolve(s.symbol);
+            } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.cn') {
+              resolve(s.symbol);
+            }
+          }
+        });
+      }, (error => {
+        resolve(symbol);
+      }));
+    });
   }
 }

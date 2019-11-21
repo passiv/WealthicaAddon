@@ -40,7 +40,7 @@ export class PassivBalance {
 export class PassivTarget {
     symbol: string;
     percent: number;
-    
+
     constructor(symbol: string, percent: number) {
         this.symbol = symbol;
         this.percent = percent;
@@ -62,6 +62,10 @@ export class PassivTrade {
 
 export class PassivSymbolRequest {
     substring: string;
+
+    constructor(symbol) {
+      this.substring = symbol;
+    }
 }
 
 export class PassivSymbolResponse {

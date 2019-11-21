@@ -112,7 +112,11 @@ export class TradesNeededComponent implements OnInit {
         (tradeResponse as PassivTrade[]).forEach(trade => {
           this.portfolio.components.forEach(component => {
             if (trade.symbol === component.symbol) {
-              component.price = trade.price.toString();
+              if (trade.price !== null) {
+                component.price = trade.price.toString();
+              } else {
+                component.price = '';
+              }
               component.adjustmentUnits = trade.units;
               component.adjustmentAction = trade.action;
             }
