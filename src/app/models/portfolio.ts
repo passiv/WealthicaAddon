@@ -26,7 +26,7 @@ export class PortfolioComponent {
   constructor(symbol: string, percentOfPortfolio: number, isCanadianTicker = true) {
     this.symbol = symbol;
     this.percentOfPortfolio = percentOfPortfolio;
-    this.displayPercent = percentOfPortfolio * 100;
+    this.displayPercent = parseFloat((percentOfPortfolio * 100).toFixed(2));
     this.isCanadianTicker = isCanadianTicker;
     this.sharesOwned = 0;
   }
@@ -73,7 +73,6 @@ export class PortfolioTemplate {
     this.components = [];
     portfolio.components.forEach(component => {
       const c = new PortfolioComponent(component.symbol, component.percentOfPortfolio);
-      c.percentOfPortfolio = component.percentOfPortfolio;
       this.components.push(c);
     });
   }
