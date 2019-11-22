@@ -347,7 +347,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
           const component = new PortfolioComponent(
             symbolToAdd,
-            percentOfTotal // currency conversion neeeded
+            percentOfTotal
           );
           component.displayPercent = parseFloat((percentOfTotal * 100).toFixed(2));
           portfolio.components.push(component);

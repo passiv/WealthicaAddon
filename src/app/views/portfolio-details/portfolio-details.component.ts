@@ -32,12 +32,12 @@ export class PortfolioDetailsComponent implements OnInit {
     this.percentCash = 100;
     this.portfolio.components.forEach(component => {
       this.pieChartLabels.push(component.symbol);
-      this.pieChartData.push(component.percentOfPortfolio * 100);
+      this.pieChartData.push(parseFloat((component.percentOfPortfolio * 100).toFixed(2)));
       this.percentCash -= component.percentOfPortfolio * 100;
     });
     if (this.percentCash > 0) {
       this.pieChartLabels.push('Cash');
-      this.pieChartData.push(this.percentCash);
+      this.pieChartData.push(parseFloat(this.percentCash.toFixed(2)));
     }
   }
 
