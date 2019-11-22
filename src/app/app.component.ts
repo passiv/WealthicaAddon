@@ -123,22 +123,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  setCash(institutions: WealthicaInstitution[]) {
+setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
-      if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
-        institution.investments.forEach((investment: WealthicaInvestment) => {
-          if (investment.currency === 'cad') {
-            this.tradesNeededComponent.cashCAD += investment.cash;
-          } else if (investment.currency === 'usd') {
-            this.tradesNeededComponent.cashUSD += investment.cash;
-          } else {
-            this.tradesNeededComponent.cashOther += investment.cash;
-          }
-        });
-      }
+        if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
+            institution.investments.forEach((investment: WealthicaInvestment) => {
+                if (this.addonOptions.investmentsFilter === null || this.addonOptions.investmentsFilter === 'all' || (this.addonOptions.investmentsFilter as string).includes(investment.id)) {
+                    if (investment.currency === 'cad') {
+                        this.tradesNeededComponent.cashCAD += investment.cash;
+                    } else if (investment.currency === 'usd') {
+                        this.tradesNeededComponent.cashUSD += investment.cash;
+                    } else {
+                        this.tradesNeededComponent.cashOther += investment.cash;
+                    }
+                }
+
+            });
+        }
     });
     this.tradesNeededComponent.refreshTradesNeeded();
-  }
+}
 
   onPortfolioSave(portfolio: PortfolioTemplate) {
     this.syncPortfolios(portfolio);
