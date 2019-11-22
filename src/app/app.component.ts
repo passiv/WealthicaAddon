@@ -293,7 +293,7 @@ setCash(institutions: WealthicaInstitution[]) {
 
   isCadPosition(position: any) {
     try {
-      if (position.security.currency.toLowerCase() === 'cad') {
+      if (position.currency.toLowerCase() === 'cad') {
         return true;
       }
       return false;
@@ -303,6 +303,28 @@ setCash(institutions: WealthicaInstitution[]) {
   }
 
   isUsdPosition(position: any) {
+    try {
+      if (position.currency.toLowerCase() === 'usd') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  isCadSecurity(position: any) {
+    try {
+      if (position.security.currency.toLowerCase() === 'cad') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  isUsdSecurity(position: any) {
     try {
       if (position.security.currency.toLowerCase() === 'usd') {
         return true;
@@ -333,11 +355,11 @@ setCash(institutions: WealthicaInstitution[]) {
       let symbolToAdd = position.security.symbol;
       const request = new PassivSymbolRequest(symbolToAdd);
       this.passivService.search(request).subscribe(response => {
-        if (this.isUsdPosition(position)) {
+        if (this.isUsdSecurity(position)) {
           if ((response as PassivSymbol[]).map(r => r.symbol).includes(symbolToAdd)) {
             addImportedSecurity = true;
           }
-        } else if (this.isCadPosition(position)) {
+        } else if (this.isCadSecurity(position)) {
           symbolToAdd = this.getCadSymbol(symbolToAdd, response as PassivSymbol[]);
           if (symbolToAdd !== null) {
             addImportedSecurity = true;
