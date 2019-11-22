@@ -11,6 +11,11 @@ export class PortfolioDetailsComponent implements OnInit {
   pieChartLabels: string[] = [];
   pieChartData: number[] = [];
   pieChartType = 'pie';
+  pieChartColors = [
+    {
+      backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(155,155,0,0.3)', 'rgba(155,0,155,0.3)', 'rgba(0,155,155,0.3)', 'rgba(100,255,0,0.3)', 'rgba(0,100,255,0.3)', 'rgba(255,0,100,0.3)', 'rgba(255,100,25,0.3)'],
+    },
+  ];
 
   portfolio: PortfolioTemplate;
   currentView: WidgetView;
