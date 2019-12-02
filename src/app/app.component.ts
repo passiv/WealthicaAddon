@@ -88,7 +88,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
         const institutions = (response as WealthicaInstitution[]);
         this.setCash(institutions);
-        this.insitutionsReceived = true;
+        this.institutionsReceived = true;
         this.refreshTradesNeededIfReady();
     }).catch((err) => {
     console.log('Error:<br><code>' + err + '</code>');
@@ -96,7 +96,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   refreshTradesNeededIfReady() {
-    if (this.positionsReceived && this.insitutionsReceived) {
+    if (this.positionsReceived && this.institutionsReceived) {
         this.tradesNeededComponent.refreshTradesNeeded();
         this.positionsReceived = false;
         this.institutionsReceived = false;
