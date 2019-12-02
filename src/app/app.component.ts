@@ -78,12 +78,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       // this.result = JSON.stringify(response);
       this.positions = response as WealthicaPosition[];
       this.updateSharesOwned();
-    }).catch((err) => {
-      console.log('Error:<br><code>' + err + '</code>');
-    });
-    this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
-      const institutions = (response as WealthicaInstitution[]);
-      this.setCash(institutions);
+      this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
+        const institutions = (response as WealthicaInstitution[]);
+        this.setCash(institutions);
+        this.tradesNeededComponent.refreshTradesNeeded();
+      }).catch((err) => {
+        console.log('Error:<br><code>' + err + '</code>');
+      });
     }).catch((err) => {
       console.log('Error:<br><code>' + err + '</code>');
     });
@@ -123,7 +124,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-setCash(institutions: WealthicaInstitution[]) {
+  setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
         if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
             institution.investments.forEach((investment: WealthicaInvestment) => {
@@ -140,8 +141,7 @@ setCash(institutions: WealthicaInstitution[]) {
             });
         }
     });
-    this.tradesNeededComponent.refreshTradesNeeded();
-}
+  }
 
   onPortfolioSave(portfolio: PortfolioTemplate) {
     this.syncPortfolios(portfolio);
