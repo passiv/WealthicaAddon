@@ -14,6 +14,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   currentView = WidgetView.SplashPage;
   portfolio: PortfolioTemplate;
   cadToUsd = 0;
+  positionsReceived = false;
+  institutionsReceived = false;
 
   addon = new wealth.Addon({
     // (optional) The 'id' of the add-on / widget.
@@ -78,16 +80,27 @@ export class AppComponent implements OnInit, AfterViewInit {
       // this.result = JSON.stringify(response);
       this.positions = response as WealthicaPosition[];
       this.updateSharesOwned();
-      this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
-        const institutions = (response as WealthicaInstitution[]);
-        this.setCash(institutions);
-        this.tradesNeededComponent.refreshTradesNeeded();
-      }).catch((err) => {
-        console.log('Error:<br><code>' + err + '</code>');
-      });
+      this.positionsReceived = true;
+      this.refreshTradesNeededIfReady();
     }).catch((err) => {
       console.log('Error:<br><code>' + err + '</code>');
     });
+    this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
+        const institutions = (response as WealthicaInstitution[]);
+        this.setCash(institutions);
+        this.insitutionsReceived = true;
+        this.refreshTradesNeededIfReady();
+    }).catch((err) => {
+    console.log('Error:<br><code>' + err + '</code>');
+    });
+  }
+
+  refreshTradesNeededIfReady() {
+    if (this.positionsReceived && this.insitutionsReceived) {
+        this.tradesNeededComponent.refreshTradesNeeded();
+        this.positionsReceived = false;
+        this.institutionsReceived = false;
+    }
   }
 
   clearData() {
