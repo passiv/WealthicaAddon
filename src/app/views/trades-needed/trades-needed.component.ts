@@ -96,7 +96,9 @@ export class TradesNeededComponent implements OnInit {
       const balances: PassivBalance[] = [];
       const targets: PassivTarget[] = [];
       this.portfolio.components.forEach(component => {
-        positions.push(new PassivPosition(component.symbol, component.sharesOwned));
+        if (component.sharesOwned !== 0) {
+          positions.push(new PassivPosition(component.symbol, component.sharesOwned));
+        }
         targets.push(new PassivTarget(component.symbol, component.percentOfPortfolio * 100));
       });
       if (this.specificCashCAD + this.specificCashUSD === 0) {
