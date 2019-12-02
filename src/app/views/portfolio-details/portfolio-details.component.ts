@@ -13,7 +13,7 @@ export class PortfolioDetailsComponent implements OnInit {
   pieChartType = 'pie';
   pieChartColors = [
     {
-      backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(155,155,0,0.3)', 'rgba(155,0,155,0.3)', 'rgba(0,155,155,0.3)', 'rgba(100,255,0,0.3)', 'rgba(0,100,255,0.3)', 'rgba(255,0,100,0.3)', 'rgba(255,100,25,0.3)'],
+      backgroundColor: ['rgba(0,163,135,1)', 'rgba(190,224,219,1)', 'rgba(42,194,168,1)', 'rgba(20,183,188,1)', 'rgba(124,218,202,1)', 'rgba(0,148,123,1)', 'rgba(107,213,195,1)', 'rgba(137,191,182,1)'],
     },
   ];
 
