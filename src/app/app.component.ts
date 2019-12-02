@@ -174,7 +174,7 @@ setCash(institutions: WealthicaInstitution[]) {
           }
         });
       });
-      this.syncportfolios(this.portfolio);
+      this.syncPortfolios(this.portfolio);
     }
   }
 
