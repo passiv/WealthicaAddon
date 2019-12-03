@@ -83,12 +83,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       console.log('Error:<br><code>' + err + '</code>');
     }));
     promises.push(this.addon.api.getInstitutions(this.getQueryFromOptions(options)).then(response => {
-        const institutions = (response as WealthicaInstitution[]);
-        this.setCash(institutions);
+      const institutions = (response as WealthicaInstitution[]);
+      this.setCash(institutions);
     }).catch((err) => {
-    console.log('Error:<br><code>' + err + '</code>');
+      console.log('Error:<br><code>' + err + '</code>');
     }));
-    Promise.all(promises).then( () => {
+    Promise.all(promises).then(() => {
       this.tradesNeededComponent.refreshTradesNeeded();
     });
   }
@@ -129,20 +129,20 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
-        if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
-            institution.investments.forEach((investment: WealthicaInvestment) => {
-                if (this.addonOptions.investmentsFilter === null || this.addonOptions.investmentsFilter === 'all' || (this.addonOptions.investmentsFilter as string).includes(investment._id)) {
-                    if (investment.currency === 'cad') {
-                        this.tradesNeededComponent.cashCAD += investment.cash;
-                    } else if (investment.currency === 'usd') {
-                        this.tradesNeededComponent.cashUSD += investment.cash;
-                    } else {
-                        this.tradesNeededComponent.cashOther += investment.cash;
-                    }
-                }
+      if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
+        institution.investments.forEach((investment: WealthicaInvestment) => {
+          if (this.addonOptions.investmentsFilter === null || this.addonOptions.investmentsFilter === 'all' || (this.addonOptions.investmentsFilter as string).includes(investment._id)) {
+            if (investment.currency === 'cad') {
+              this.tradesNeededComponent.cashCAD += investment.cash;
+            } else if (investment.currency === 'usd') {
+              this.tradesNeededComponent.cashUSD += investment.cash;
+            } else {
+              this.tradesNeededComponent.cashOther += investment.cash;
+            }
+          }
 
-            });
-        }
+        });
+      }
     });
   }
 
@@ -392,7 +392,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     let cadSymbol = null;
     passivSymbols.forEach(s => {
       if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.to') {
-        cadSymbol =  s.symbol;
+        cadSymbol = s.symbol;
       } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.vn') {
         cadSymbol = s.symbol;
       }
