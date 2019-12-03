@@ -74,9 +74,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     // }
     this.addonOptions = options;
     this.loadFromWealthica();
-    let promises = [];
+    const promises = [];
     promises.push(this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
-      // this.result = JSON.stringify(response);
       this.positions = response as WealthicaPosition[];
       this.updateSharesOwned();
     }).catch((err) => {
@@ -129,9 +128,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   setCash(institutions: WealthicaInstitution[]) {
     institutions.forEach(institution => {
-      if (this.addonOptions.institutionsFilter === null || (this.addonOptions.institutionsFilter as string).includes(institution.id)) {
+      if (this.institutionIsSelected(institution.id)) {
         institution.investments.forEach((investment: WealthicaInvestment) => {
-          if (this.addonOptions.investmentsFilter === null || this.addonOptions.investmentsFilter === 'all' || (this.addonOptions.investmentsFilter as string).includes(investment._id)) {
+          if (this.investmentIsSelected(investment._id)) {
             if (investment.currency === 'cad') {
               this.tradesNeededComponent.cashCAD += investment.cash;
             } else if (investment.currency === 'usd') {
@@ -140,23 +139,9 @@ export class AppComponent implements OnInit, AfterViewInit {
               this.tradesNeededComponent.cashOther += investment.cash;
             }
           }
-
         });
       }
     });
-  }
-
-  onPortfolioSave(portfolio: PortfolioTemplate) {
-    this.syncPortfolios(portfolio);
-    this.saveToWealthica();
-  }
-
-  onEditCancel(restoredPortfolio: PortfolioTemplate) {
-    if (restoredPortfolio === null) {
-      this.loadFromWealthica();
-    } else {
-      this.syncPortfolios(restoredPortfolio);
-    }
   }
 
   updateSharesOwned() {
@@ -177,6 +162,36 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         });
       });
+    }
+  }
+
+  investmentIsSelected(id: string): boolean {
+    if (this.addonOptions.investmentsFilter === null
+      || this.addonOptions.investmentsFilter === 'all'
+      || (this.addonOptions.investmentsFilter as string).includes(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  institutionIsSelected(id: string): boolean {
+    if (this.addonOptions.institutionsFilter === null
+      || (this.addonOptions.institutionsFilter as string).includes(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  onPortfolioSave(portfolio: PortfolioTemplate) {
+    this.syncPortfolios(portfolio);
+    this.saveToWealthica();
+  }
+
+  onEditCancel(restoredPortfolio: PortfolioTemplate) {
+    if (restoredPortfolio === null) {
+      this.loadFromWealthica();
+    } else {
+      this.syncPortfolios(restoredPortfolio);
     }
   }
 
