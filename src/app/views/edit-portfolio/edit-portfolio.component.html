@@ -14,9 +14,6 @@
   <button class="save primary" (click)="onSave()" [disabled]="!validAllocation()">Save</button>
   <button class="link delete" (click)="onDelete()"><i class="fas fa-times" wiid="C386"></i>Delete Portfolio</button>
 </div>
-
-Cash: {{percentCash().toFixed(2)}}%
-
 <div class="headingContainer">
   <h2>Target Portfolio</h2>
 </div>
@@ -46,5 +43,8 @@ Cash: {{percentCash().toFixed(2)}}%
     <div><button class="btn remove primary" (click)="deleteComponent(component)"><span
           class="fas fa-minus"></span></button></div>
   </div>
+  <p class="cash">
+    Cash: {{percentCash().toFixed(2)}}%
+  </p>
   <button class="primary" (click)="newComponent()"><span class="fas fa-plus"></span> Add Security</button>
 </div>

@@ -3,6 +3,33 @@
   margin: 5px;
 }
 
+.appHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cta {
+  display: flex;
+  align-items: flex-start;
+  margin-right: 20px;
+  .primary {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  p {
+    max-width: 235px;
+    text-align: center;
+    margin-right: 20px;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.22;
+    letter-spacing: -0.3px;
+    color: #231f20;
+  }
+}
+
 ::ng-deep button.primary {
   background: #003BA2;
   border: none;

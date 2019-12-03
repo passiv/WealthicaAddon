@@ -3,5 +3,65 @@
 }
 
 .center {
-	text-align: center;
+  text-align: center;
+  max-width: 630px;
+  margin: 50px auto 60px;
+
+  h1 {
+    font-size: 54px;
+    font-weight: 600;
+    letter-spacing: -1.8px;
+    text-align: center;
+    text-transform: none;
+    color: #231f20;
+
+    span {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+      color: #767676;
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.tagline {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.3;
+  text-align: center;
+  color: #2a2d34;
+  letter-spacing: 0.02em;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  text-align: center;
+  color: #00a387;
+  letter-spacing: 0.01em;
+}
+
+.subP {
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.33;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #2a2d34;
+  margin-bottom: 45px;
+}
+
+.secondary {
+  border-color: #003BA2;
+  color: #003BA2;
+}
+
+.link {
+  color: #003BA2;
+  font-weight: 600;
 }
