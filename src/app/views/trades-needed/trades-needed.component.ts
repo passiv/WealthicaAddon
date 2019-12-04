@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { PortfolioTemplate, PortfolioComponent, PassivPosition, PassivTarget, PassivCurrency, PassivBalance, PassivTradeRequest, PassivTradeResponse, PassivTrade } from '../../models';
+import { PortfolioTemplate, PortfolioComponent, PassivPosition, PassivTarget, PassivCurrency, PassivBalance, PassivTradeRequest, PassivTradeResponse, PassivTrade, WealthicaPosition, PassivSymbol, PassivSymbolRequest, WealthicaSecurity } from '../../models';
 import { WidgetView } from '../widget-view';
 import { PassivService } from 'src/app/services/passiv.service';
 
@@ -9,15 +9,13 @@ import { PassivService } from 'src/app/services/passiv.service';
   styleUrls: ['./trades-needed.component.scss']
 })
 export class TradesNeededComponent implements OnInit {
-
   portfolio: PortfolioTemplate;
+  positions: WealthicaPosition[];
   currentView: WidgetView;
   cashCAD = 0;
   cashUSD = 0;
   cashOther = 0;
   buyOnly = false;
-  specificCashCAD = 0;
-  specificCashUSD = 0;
   loading = false;
   areSellActions = false;
   areBuyActions = false;
@@ -92,41 +90,37 @@ export class TradesNeededComponent implements OnInit {
       component.adjustmentUnits = 0;
     });
     if (this.portfolio !== null) {
-      const positions: PassivPosition[] = [];
       const balances: PassivBalance[] = [];
       const targets: PassivTarget[] = [];
-      this.portfolio.components.forEach(component => {
-        if (component.sharesOwned !== 0) {
-          positions.push(new PassivPosition(component.symbol, component.sharesOwned));
-        }
-        targets.push(new PassivTarget(component.symbol, component.percentOfPortfolio * 100));
-      });
-      if (this.specificCashCAD + this.specificCashUSD === 0) {
+      this.setPositions().then(positions => {
+        console.log('pos:');
+        console.log(positions);
+        this.portfolio.components.forEach(component => {
+          targets.push(new PassivTarget(component.symbol, component.percentOfPortfolio * 100));
+        });
         balances.push(new PassivBalance('cad', this.cashCAD));
         balances.push(new PassivBalance('usd', this.cashUSD));
-      } else {
-        balances.push(new PassivBalance('cad', this.specificCashCAD));
-        balances.push(new PassivBalance('usd', this.specificCashUSD));
-
-      }
-      this.passivService.getTrades(new PassivTradeRequest(positions, balances, targets, this.buyOnly))
-      .subscribe(tradeResponse => {
-        (tradeResponse as PassivTrade[]).forEach(trade => {
-          this.portfolio.components.forEach(component => {
-            if (trade.symbol === component.symbol) {
-              if (trade.price !== null) {
-                component.price = trade.price.toString();
-              } else {
-                component.price = '';
-              }
-              component.adjustmentUnits = trade.units;
-              component.adjustmentAction = trade.action;
-            }
+        console.log(new PassivTradeRequest(positions, balances, targets, this.buyOnly));
+        this.passivService.getTrades(new PassivTradeRequest(positions, balances, targets, this.buyOnly))
+          .subscribe(tradeResponse => {
+            console.log(tradeResponse);
+            (tradeResponse as PassivTrade[]).forEach(trade => {
+              this.portfolio.components.forEach(component => {
+                if (trade.symbol === component.symbol) {
+                  if (trade.price !== null) {
+                    component.price = trade.price.toString();
+                  } else {
+                    component.price = '';
+                  }
+                  component.adjustmentUnits = trade.units;
+                  component.adjustmentAction = trade.action;
+                }
+              });
+            });
+            this.setActionBooleans();
+            this.loading = false;
+            this.cdr.detectChanges();
           });
-        });
-        this.setActionBooleans();
-        this.loading = false;
-        this.cdr.detectChanges();
       });
     }
   }
@@ -134,6 +128,59 @@ export class TradesNeededComponent implements OnInit {
   resetActionBooleans() {
     this.areSellActions = false;
     this.areBuyActions = false;
+  }
+
+  setPositions(): Promise<PassivPosition[]> {
+    const positionPromise = new Promise(resolve => {
+      const positions = [] as PassivPosition[];
+      const promises = [];
+      let count = 1;
+
+      this.positions.forEach(position => {
+
+        if (WealthicaPosition.isCadPosition(position)) {
+          const request = new PassivSymbolRequest(position.security.symbol);
+          promises.push(this.passivService.search(request).subscribe(response => {
+            let symbol = position.security.symbol;
+            if (WealthicaSecurity.isCadSecurity(position)) {
+              const cadSymbol = PassivSymbol.getCadSymbolFromWealthica(symbol, response as PassivSymbol[]);
+              if (cadSymbol !== null) {
+                symbol = cadSymbol;
+              }
+            }
+            const passivPosition = new PassivPosition(symbol, position.quantity);
+            positions.push(passivPosition);
+            count++;
+            if (count === this.positions.length) {
+              resolve(positions);
+            }
+          }));
+        }
+      });
+    });
+    return positionPromise as Promise<PassivPosition[]>;
+  }
+
+  isCadSecurity(position: any) {
+    try {
+      if (position.security.currency.toLowerCase() === 'cad') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  isUsdSecurity(position: any) {
+    try {
+      if (position.security.currency.toLowerCase() === 'usd') {
+        return true;
+      }
+      return false;
+    } catch (ex) {
+      return false;
+    }
   }
 
   setActionBooleans() {
