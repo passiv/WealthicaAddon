@@ -1,7 +1,6 @@
 <button class="back link" (click)="onCancel()"><i class="fas fa-angle-left" wiid="C386"></i>Back</button>
 <h1>Edit {{portfolio?.portfolioName}}</h1>
 
-<div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
 <div class="alert alert-danger" *ngIf="noImportData">No securities available to be imported from selected account(s)
 </div>
 
@@ -17,6 +16,7 @@
 <div class="headingContainer">
   <h2>Target Portfolio</h2>
 </div>
+<div class="alert alert-danger" *ngIf="!validAllocation()">Percentages of all components should not exceed 100%</div>
 <div class="securityTable">
   <div class="columnHeadings flex">
     <div>Security</div>
@@ -28,8 +28,11 @@
       <div class="input-group mb-3">
         <input type="text" class="form-control" [(ngModel)]="component.symbol" (keyup)="loadSuggestions(component)">
       </div>
-      <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)"
-        class="suggestion">{{result.symbol}} - {{result.description}}</div>
+      <div class="symbol-list">
+        <div *ngFor="let result of component.suggestedSymbols" (click)="setSymbol(component, result.symbol)"
+          class="suggestion">{{result.symbol}} - {{result.description}}
+        </div>
+      </div>
     </div>
     <div>
       <div class="percentContainer">
