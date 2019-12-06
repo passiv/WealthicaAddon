@@ -8,6 +8,34 @@
 	font-weight: 600;
 }
 
+.symbol-list {
+	background: #eaf1f7;
+}
+
+.suggestion {
+  font-size: 17px;
+  width: 125%;
+  background: #eaf1f7;
+  padding: 7px 8px;
+  &:first-child {
+  	padding-top: 5px;
+  }
+   &:last-child {
+  	padding-bottom: 5px;
+  	margin-bottom: 20px;
+  }
+  &:hover {
+  	background: #003BA2;
+  	color: #fff;
+  }
+}
+
+.alert-danger {
+  margin-top: -5px;
+  margin-bottom: 15px;
+  color: #e80000;
+}
+
 .securityTable {
 	.flex {
 		> div:first-of-type {
