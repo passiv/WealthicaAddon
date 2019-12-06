@@ -85,6 +85,8 @@ export class PassivSymbol {
         cadSymbol = s.symbol;
       } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.vn') {
         cadSymbol = s.symbol;
+      } else if (s.symbol.toLowerCase() === symbol.toLowerCase() + '.cn') {
+        cadSymbol = s.symbol;
       }
     });
     return cadSymbol;

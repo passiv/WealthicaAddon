@@ -339,7 +339,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         } else if (WealthicaSecurity.isCadSecurity(position)) {
           symbolToAdd = PassivSymbol.getCadSymbolFromWealthica(symbolToAdd, response as PassivSymbol[]);
-          if (symbolToAdd !== null) {
+          if (symbolToAdd !== null && !symbolToAdd.includes('.cn')) {
             addImportedSecurity = true;
           }
         }
