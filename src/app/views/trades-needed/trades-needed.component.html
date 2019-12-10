@@ -4,8 +4,8 @@
     <h1>Trades - {{portfolio?.portfolioName}}</h1>
   </div>
   <div>
-    <div class="cash" *ngIf="cashCAD > 0">Total Holdings (CAD) <span>${{cashCAD.toFixed(2)}}</span></div>
-    <div class="cash" *ngIf="cashUSD > 0">Total Holdings (USD) <span>${{cashUSD.toFixed(2)}}</span></div>
+    <div class="cash" *ngIf="cashCAD > 0">Total Cash (CAD) <span>${{cashCAD.toFixed(2)}}</span></div>
+    <div class="cash" *ngIf="cashUSD > 0">Total Cash (USD) <span>${{cashUSD.toFixed(2)}}</span></div>
     <div class="cash" *ngIf="!loading && cashUSD + cashCAD === 0">No cash in your account(s)</div>
   </div>
 </div>
