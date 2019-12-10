@@ -19,7 +19,7 @@
     letter-spacing: 0.05em;
   }
   p {
-    max-width: 235px;
+    max-width: 280px;
     text-align: center;
     margin-right: 20px;
     font-size: 20px;
@@ -77,6 +77,19 @@
   	color: #383838;
   	margin-left: 20px;
   }
+}
+
+::ng-deep a.btn-primary {
+  background: #003BA2;
+  border: none;
+  color: #fff;
+  outline: none;
+  text-decoration: none;
+  padding: 15px 20px 18px 20px;
+	border-radius: 4px;
+	&.save {
+		background: #04A287;
+	}
 }
 
 ::ng-deep h1 {
