@@ -134,7 +134,7 @@ export class TradesNeededComponent implements OnInit {
     const positionPromise = new Promise(resolve => {
       const positions = [] as PassivPosition[];
       const promises = [];
-      let count = 1;
+      let count = 0;
 
       this.positions.forEach(position => {
 
@@ -148,6 +148,7 @@ export class TradesNeededComponent implements OnInit {
                 symbol = cadSymbol;
               }
             }
+
             const passivPosition = new PassivPosition(symbol, position.quantity);
             positions.push(passivPosition);
             count++;
