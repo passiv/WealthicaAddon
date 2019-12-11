@@ -17,6 +17,7 @@ export class TradesNeededComponent implements OnInit {
   cashOther = 0;
   buyOnly = false;
   loading = false;
+  loadingText = '';
   trades: PortfolioComponent[] = [];
   areSellActions = false;
   areBuyActions = false;
@@ -55,7 +56,7 @@ export class TradesNeededComponent implements OnInit {
   }
 
   refreshTradesNeeded() {
-    this.resetActionBooleans();
+    this.resetVariables();
     this.loading = true;
     // Needed to update loading variable when accounts are filtered
     this.cdr.detectChanges();
@@ -75,6 +76,7 @@ export class TradesNeededComponent implements OnInit {
         balances.push(new PassivBalance('usd', this.cashUSD));
         console.log('Request to Passiv:');
         console.log(new PassivTradeRequest(positions, balances, targets, this.buyOnly));
+        this.loadingText = 'Calculating trades...';
         this.passivService.getTrades(new PassivTradeRequest(positions, balances, targets, this.buyOnly))
           .subscribe(tradeResponse => {
             console.log('Response from Passiv:');
@@ -118,7 +120,9 @@ export class TradesNeededComponent implements OnInit {
     }
   }
 
-  resetActionBooleans() {
+  resetVariables() {
+    this.loadingText = '';
+    this.trades = [];
     this.areSellActions = false;
     this.areBuyActions = false;
   }
@@ -134,6 +138,7 @@ export class TradesNeededComponent implements OnInit {
         if (WealthicaPosition.isCadPosition(position)) {
           const request = new PassivSymbolRequest(position.security.symbol);
           promises.push(this.passivService.search(request).subscribe(response => {
+            this.loadingText = 'Verifying ' + position.security.symbol + '...';
             let symbol = position.security.symbol;
             if (WealthicaSecurity.isCadSecurity(position)) {
               const cadSymbol = PassivSymbol.getCadSymbolFromWealthica(symbol, response as PassivSymbol[]);
