@@ -93,16 +93,18 @@ export class TradesNeededComponent implements OnInit {
       const balances: PassivBalance[] = [];
       const targets: PassivTarget[] = [];
       this.setPositions().then(positions => {
-        console.log('pos:');
+        console.log('Positions:');
         console.log(positions);
         this.portfolio.components.forEach(component => {
           targets.push(new PassivTarget(component.symbol, component.percentOfPortfolio * 100));
         });
         balances.push(new PassivBalance('cad', this.cashCAD));
         balances.push(new PassivBalance('usd', this.cashUSD));
+        console.log('Request to Passiv:');
         console.log(new PassivTradeRequest(positions, balances, targets, this.buyOnly));
         this.passivService.getTrades(new PassivTradeRequest(positions, balances, targets, this.buyOnly))
           .subscribe(tradeResponse => {
+            console.log('Response from Passiv:');
             console.log(tradeResponse);
             (tradeResponse as PassivTrade[]).forEach(trade => {
               this.portfolio.components.forEach(component => {
