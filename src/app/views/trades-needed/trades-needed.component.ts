@@ -17,6 +17,7 @@ export class TradesNeededComponent implements OnInit {
   cashOther = 0;
   buyOnly = false;
   loading = false;
+  trades: PortfolioComponent[] = [];
   areSellActions = false;
   areBuyActions = false;
 
@@ -28,39 +29,14 @@ export class TradesNeededComponent implements OnInit {
 
   }
 
-  adjustmentNeeded(component: PortfolioComponent): string {
-    if (component !== null) {
-      const correctShares = (component.percentOfPortfolio * this.totalPortfolioValue()) / parseFloat(component.price);
-      const adjustment = Math.round(correctShares - component.sharesOwned);
-      if (adjustment < 0) {
-        return adjustment.toString();
-      } else {
-        return '+' + adjustment;
-      }
-    } else {
-      return '---';
-    }
-  }
-
-  totalPortfolioValue() {
-    let totalValue = 0;
-    this.portfolio.components.forEach(component => {
-      totalValue += parseFloat(component.price) * component.sharesOwned;
-    });
-    return totalValue;
-  }
-
   buyOnlyToggle() {
     this.buyOnly = !this.buyOnly;
     this.refreshTradesNeeded();
   }
 
   checkAreSellActions() {
-    if (this.portfolio === null || this.portfolio === undefined) {
-      return false;
-    }
     let result = false;
-    this.portfolio.components.forEach(component => {
+    this.trades.forEach(component => {
       if (component.isSellAction()) {
         result = true;
       }
@@ -69,11 +45,8 @@ export class TradesNeededComponent implements OnInit {
   }
 
   checkAreBuyActions() {
-    if (this.portfolio === null || this.portfolio === undefined) {
-      return false;
-    }
     let result = false;
-    this.portfolio.components.forEach(component => {
+    this.trades.forEach(component => {
       if (component.isBuyAction()) {
         result = true;
       }
@@ -106,9 +79,26 @@ export class TradesNeededComponent implements OnInit {
           .subscribe(tradeResponse => {
             console.log('Response from Passiv:');
             console.log(tradeResponse);
+            this.trades = [];
             (tradeResponse as PassivTrade[]).forEach(trade => {
+              const tradeComponent = new PortfolioComponent(trade.symbol, 0);
+              tradeComponent.adjustmentUnits = trade.units;
+              tradeComponent.adjustmentAction = trade.action;
+              if (trade.price !== null) {
+                tradeComponent.price = trade.price.toString();
+              } else {
+                tradeComponent.price = '';
+              }
+              positions.forEach(position => {
+                if (trade.symbol.toLowerCase() === position.symbol.toLowerCase()) {
+                  tradeComponent.sharesOwned = position.units;
+                  return;
+                }
+              });
+
               this.portfolio.components.forEach(component => {
                 if (trade.symbol === component.symbol) {
+                  // tradeComponent.percentOfPortfolio = component.percentOfPortfolio;
                   if (trade.price !== null) {
                     component.price = trade.price.toString();
                   } else {
@@ -118,6 +108,7 @@ export class TradesNeededComponent implements OnInit {
                   component.adjustmentAction = trade.action;
                 }
               });
+              this.trades.push(tradeComponent);
             });
             this.setActionBooleans();
             this.loading = false;
@@ -194,5 +185,29 @@ export class TradesNeededComponent implements OnInit {
   portfolioDetails() {
     this.switchView.emit(WidgetView.PortfolioDetails);
   }
+
+ // Manual calculation of adjustment needed (before passiv api)
+  // adjustmentNeeded(component: PortfolioComponent): string {
+  //   if (component !== null) {
+  //     const correctShares = (component.percentOfPortfolio * this.totalPortfolioValue()) / parseFloat(component.price);
+  //     const adjustment = Math.round(correctShares - component.sharesOwned);
+  //     if (adjustment < 0) {
+  //       return adjustment.toString();
+  //     } else {
+  //       return '+' + adjustment;
+  //     }
+  //   } else {
+  //     return '---';
+  //   }
+  // }
+
+  // totalPortfolioValue() {
+  //   let totalValue = 0;
+  //   this.trades.forEach(component => {
+  //     totalValue += parseFloat(component.price) * component.sharesOwned;
+  //   });
+  //   console.log('TOTAL VALUE ' + totalValue);
+  //   return totalValue;
+  // }
 
 }

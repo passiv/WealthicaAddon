@@ -34,7 +34,7 @@
 <div [hidden]="!areSellActions">
   <h2>Sell:</h2>
   <ul>
-    <li *ngFor="let component of portfolio?.components">
+    <li *ngFor="let component of trades">
       <span *ngIf="component?.isSellAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
     </li>
   </ul>
@@ -43,7 +43,7 @@
 <div [hidden]="!areBuyActions">
   <h2>Buy:</h2>
   <ul>
-    <li *ngFor="let component of portfolio?.components">
+    <li *ngFor="let component of trades">
       <span *ngIf="component?.isBuyAction()">{{component?.adjustmentUnits}} shares of {{component?.symbol}}</span>
     </li>
   </ul>
@@ -65,7 +65,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let component of portfolio?.components" scope="row">
+    <tr *ngFor="let component of trades" scope="row">
       <td>{{component?.symbol}}</td>
       <td><span *ngIf="component?.getPrice() !== ''">$</span>{{component?.getPrice()}}</td>
       <td>{{component?.sharesOwned}}</td>
