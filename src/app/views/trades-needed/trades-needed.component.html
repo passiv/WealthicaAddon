@@ -30,6 +30,7 @@
 </div>
 
 <mat-spinner class="spinner" [diameter]="40" *ngIf="loading"></mat-spinner>
+<span *ngIf="loading"><p>{{loadingText}}</p><p>&nbsp;</p></span>
 
 <div [hidden]="!areSellActions">
   <h2>Sell:</h2>
