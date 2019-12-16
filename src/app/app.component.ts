@@ -16,12 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   portfolio: PortfolioTemplate;
   cadToUsd = 0;
 
-  addon = new wealth.Addon({
-    // (optional) The 'id' of the add-on / widget.
-    // This is only required in the add-on release preparation process.
-    // For add-on development with the Developer Add-on, this should not be set.
-    id: environment.production && 'passiv/passiv-lite'
-  });
+  addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
   addonOptions;
   positions: WealthicaPosition[] = null;
 
