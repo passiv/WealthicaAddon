@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // (optional) The 'id' of the add-on / widget.
     // This is only required in the add-on release preparation process.
     // For add-on development with the Developer Add-on, this should not be set.
-    // id: 'addon-id' | 'addon-id/widgets/widget-id'
+    id: 'passiv/passiv-lite'
   });
   addonOptions;
   positions: WealthicaPosition[] = null;
