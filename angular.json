@@ -10,14 +10,14 @@
           "style": "scss"
         }
       },
-      "root": "",
+      "root": "/passiv/passiv-web",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/WealthicaAddon/passiv/passiv-lite",
+            "outputPath": "dist/WealthicaAddon",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
