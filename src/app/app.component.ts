@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   portfolio: PortfolioTemplate;
   cadToUsd = 0;
 
-  addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
+  addon = new wealth.Addon({});
   addonOptions;
   positions: WealthicaPosition[] = null;
 
