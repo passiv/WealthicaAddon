@@ -39,8 +39,12 @@
 .securityTable {
 	.flex {
 		> div:first-of-type {
-			width: 30%;
+			width: 60%;
 		}
+    > div:nth-of-type(2) {
+      width: 20%;
+      padding-left: 20px;
+    }
 	}
 }
 
