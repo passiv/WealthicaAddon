@@ -3,7 +3,7 @@ import { PortfolioOverviewComponent, EditPortfolioComponent, PortfolioDetailsCom
 import { PortfolioTemplate, PortfolioComponent, WealthicaPosition, WealthicaInvestment, WealthicaData, WealthicaInstitution, PassivSymbol, PassivSymbolRequest, PassivCurrencyRate, WealthicaSecurity } from './models';
 import * as wealth from '@wealthica/wealthica.js';
 import { PassivService } from './services/passiv.service';
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   portfolio: PortfolioTemplate;
   cadToUsd = 0;
 
-  addon = new wealth.Addon({});
+  addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
   addonOptions;
   positions: WealthicaPosition[] = null;
 
