@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/WealthicaAddon",
+            "outputPath": "dist/WealthicaAddon/passiv/passiv-lite",
             "baseHref": "/passiv/passiv-lite/",
             "deployUrl": "/passiv/passiv-lite/",
             "index": "src/index.html",
