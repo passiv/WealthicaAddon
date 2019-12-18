@@ -19,6 +19,7 @@
           "options": {
             "outputPath": "dist/WealthicaAddon",
             "baseHref": "/passiv/passiv-lite/",
+            "deployUrl": "/passiv/passiv-lite/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
