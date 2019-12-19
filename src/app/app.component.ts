@@ -69,7 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   data: { portfolios: [, , ] },
     //   ...
     // }
-    this.addonOptions = options;
+    this.updateOptions(options);
     console.log(options);
     this.loadFromWealthica();
     const promises = [];
@@ -90,6 +90,27 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.tradesNeededComponent.filtersUpdated = true;
       this.tradesNeededComponent.detectChanges();
     });
+  }
+
+  updateOptions(options) {
+    if (options.investmentsFilter !== undefined) {
+      this.addonOptions.investmentsFilter = options.investmentsFilter;
+    }
+    if (options.institutionsFilter !== undefined) {
+      this.addonOptions.institutionsFilter = options.institutionsFilter;
+    }
+    if (options.data !== undefined) {
+      this.addonOptions.data = options.data;
+    }
+    if (options.groupsFilter !== undefined) {
+      this.addonOptions.groupsFilter = options.groupsFilter;
+    }
+    if (options.assetsFilter !== undefined) {
+      this.addonOptions.assetsFilter = options.assetsFilter;
+    }
+    if (options.liabilitiesFilter !== undefined) {
+      this.addonOptions.liabilitiesFilter = options.liabilitiesFilter;
+    }
   }
 
   clearData() {
