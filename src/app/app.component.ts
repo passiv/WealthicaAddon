@@ -113,7 +113,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   loadFromWealthica() {
-    if (this.addonOptions !== null && this.addonOptions.data !== undefined && this.addonOptions.data as WealthicaData !== null) {
+    if (this.addonOptions !== null && this.addonOptions.data !== undefined && this.addonOptions.data !== null) {
+      console.log('updating saved portfolios');
       this.portfolioOverviewComponent.portfolios = [];
       (this.addonOptions.data as WealthicaData).portfolios.forEach(portfolio => {
         const p = new PortfolioTemplate();
