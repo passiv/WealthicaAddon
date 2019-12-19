@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   initializeWealthicaAddon() {
     this.addon.on('init', (options) => {
-      this.refreshWealthicaData(options, false);
+      this.refreshWealthicaData(options);
     });
 
     this.addon.on('update', (options) => {
@@ -56,11 +56,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.addon.on('reload', (options) => {
       console.log('reload');
       this.clearData();
-      if (this.currentView !== WidgetView.PortfolioOverview) {
-        this.refreshWealthicaData(options);
-      } else {
-        this.refreshWealthicaData(options, false);
-      }
+      this.refreshWealthicaData(options);
     });
   }
 
