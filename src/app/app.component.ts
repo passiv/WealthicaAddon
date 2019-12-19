@@ -113,8 +113,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   loadFromWealthica() {
-    if (this.addonOptions !== null && this.addonOptions.data !== undefined && this.addonOptions.data !== null) {
-      console.log('updating saved portfolios');
+    if (this.addonOptions !== null && this.addonOptions.data !== undefined 
+        && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
       this.portfolioOverviewComponent.portfolios = [];
       (this.addonOptions.data as WealthicaData).portfolios.forEach(portfolio => {
         const p = new PortfolioTemplate();
@@ -124,7 +124,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.portfolioOverviewComponent.portfolios.push(p);
       });
       this.portfolioOverviewComponent.portfolio = this.portfolioOverviewComponent.portfolios[0];
-    } else {
+    } else if (this.portfolioOverviewComponent.portfolios.length === 0) {
       this.portfolioOverviewComponent.portfolios = [];
       const portfolio = new PortfolioTemplate();
       portfolio.portfolioName = 'New Portfolio';
