@@ -193,6 +193,10 @@ export class TradesNeededComponent implements OnInit {
     this.switchView.emit(WidgetView.PortfolioDetails);
   }
 
+  detectChanges() {
+    this.cdr.detectChanges();
+  }
+
  // Manual calculation of adjustment needed (before passiv api)
   // adjustmentNeeded(component: PortfolioComponent): string {
   //   if (component !== null) {

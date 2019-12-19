@@ -26,11 +26,23 @@
 
 <div class="actions">
   <mat-checkbox [(ngModel)]="buyOnly">Buy only</mat-checkbox><br>
-  <button class="secondary" (click)="refreshTradesNeeded()"><i class="fas fa-sync-alt" wiid="C386"></i>Refresh trades</button>
+  <button class="secondary" (click)="refreshTradesNeeded()"><i class="fas fa-sync-alt" wiid="C386"></i>Refresh
+    trades</button>
 </div>
 
 <mat-spinner class="spinner" [diameter]="40" *ngIf="loading"></mat-spinner>
-<span *ngIf="loading"><p>{{loadingText}}</p><p>&nbsp;</p></span>
+<span *ngIf="loading">
+  <p>{{loadingText}}</p>
+  <p>&nbsp;</p>
+</span>
+
+<p class="alert" [hidden]="areBuyActions || areSellActions || loading">
+  No trades are suggested with the current configuration. Your portfolio is on track with your targets
+</p>
+
+<p class="alert" [hidden]="!filtersUpdated || loading">
+  Filters have been changed since last update. Refresh trades for accurate data
+</p>
 
 <div [hidden]="!areSellActions">
   <h2>Sell:</h2>
@@ -52,35 +64,27 @@
 
 <div>
 
-<p class="alert" [hidden]="areBuyActions || areSellActions || loading">
-    No trades are suggested with the current configuration. Your portfolio is on track with your targets
-</p>
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Current Price</th>
+        <th># of Shares Owned</th>
+        <th>Adjustment of shares</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let component of trades" scope="row">
+        <td>{{component?.symbol}}</td>
+        <td><span *ngIf="component?.getPrice() !== ''">$</span>{{component?.getPrice()}}</td>
+        <td>{{component?.sharesOwned}}</td>
+        <td>
+          <span *ngIf="component.isBuyAction()">+</span>
+          <span *ngIf="component.isSellAction()">-</span>
+          {{component?.adjustmentUnits}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<p class="alert" [hidden]="!filtersUpdated || loading">
-  Filters have been changed since last update. Refresh trades for accurate data
-</p>
-
-<table *ngIf="!loading">
-  <thead>
-    <tr>
-      <th>Symbol</th>
-      <th>Current Price</th>
-      <th># of Shares Owned</th>
-      <th>Adjustment of shares</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let component of trades" scope="row">
-      <td>{{component?.symbol}}</td>
-      <td><span *ngIf="component?.getPrice() !== ''">$</span>{{component?.getPrice()}}</td>
-      <td>{{component?.sharesOwned}}</td>
-      <td>
-        <span *ngIf="component.isBuyAction()">+</span>
-        <span *ngIf="component.isSellAction()">-</span>
-        {{component?.adjustmentUnits}}
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<button class="primary" (click)="portfolioDetails()">Done</button>
+  <button class="primary" (click)="portfolioDetails()">Done</button>

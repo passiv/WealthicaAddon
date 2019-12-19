@@ -88,6 +88,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     Promise.all(promises).then(() => {
       this.tradesNeededComponent.positions = this.positions;
       this.tradesNeededComponent.filtersUpdated = true;
+      this.tradesNeededComponent.detectChanges();
     });
   }
 
