@@ -50,11 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.addon.on('update', (options) => {
       console.log('update');
       this.clearData();
-      if (this.currentView !== WidgetView.PortfolioOverview) {
-        this.refreshWealthicaData(options);
-      } else {
-        this.refreshWealthicaData(options, false);
-      }
+      this.refreshWealthicaData(options);
     });
 
     this.addon.on('reload', (options) => {
@@ -68,7 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  refreshWealthicaData(options: object, refreshTrades=true) {
+  refreshWealthicaData(options: object) {
     // {
     //   fromDate: '2018-01-01',
     //   toDate: '2018-04-30',
@@ -95,9 +91,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }));
     Promise.all(promises).then(() => {
       this.tradesNeededComponent.positions = this.positions;
-      if (refreshTrades) {
-        this.tradesNeededComponent.refreshTradesNeeded();
-      }
+      this.tradesNeededComponent.filtersUpdated = true;
     });
   }
 
@@ -114,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   loadFromWealthica() {
-    if (this.addonOptions !== null && this.addonOptions.data !== undefined 
+    if (this.addonOptions !== null && this.addonOptions.data !== undefined
       && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
         this.wealthicaData = (this.addonOptions.data as WealthicaData);
     }

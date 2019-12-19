@@ -56,6 +56,10 @@
     No trades are suggested with the current configuration. Your portfolio is on track with your targets
 </p>
 
+<p class="alert" [hidden]="!filtersUpdated || loading">
+  Filters have been changed since last update. Refresh trades for accurate data
+</p>
+
 <table *ngIf="!loading">
   <thead>
     <tr>

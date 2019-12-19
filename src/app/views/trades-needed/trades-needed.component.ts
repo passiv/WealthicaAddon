@@ -21,6 +21,7 @@ export class TradesNeededComponent implements OnInit {
   trades: PortfolioComponent[] = [];
   areSellActions = false;
   areBuyActions = false;
+  filtersUpdated = false;
 
   @Output() switchView: EventEmitter<WidgetView> = new EventEmitter();
 
@@ -114,6 +115,7 @@ export class TradesNeededComponent implements OnInit {
             });
             this.setActionBooleans();
             this.loading = false;
+            this.filtersUpdated = false;
             this.cdr.detectChanges();
           });
       });
