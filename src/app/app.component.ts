@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
   addonOptions;
   positions: WealthicaPosition[] = null;
+  wealthicaData: WealthicaData = null;
 
   @ViewChild(PortfolioOverviewComponent, { static: false })
   portfolioOverviewComponent: PortfolioOverviewComponent;
@@ -114,9 +115,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   loadFromWealthica() {
     if (this.addonOptions !== null && this.addonOptions.data !== undefined 
-        && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
+      && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
+        this.wealthicaData = (this.addonOptions.data as WealthicaData);
+    }
+    if (this.wealthicaData !== null && this.wealthicaData !== undefined) {
       this.portfolioOverviewComponent.portfolios = [];
-      (this.addonOptions.data as WealthicaData).portfolios.forEach(portfolio => {
+      this.wealthicaData.portfolios.forEach(portfolio => {
         const p = new PortfolioTemplate();
         p.portfolioName = portfolio.portfolioName;
         p.id = portfolio.id;
