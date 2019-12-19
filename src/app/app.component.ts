@@ -179,6 +179,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   investmentIsSelected(id: string): boolean {
     if (this.addonOptions.investmentsFilter === null
+      || (this.addonOptions.investmentsFilter as string) === undefined
       || this.addonOptions.investmentsFilter === 'all'
       || (this.addonOptions.investmentsFilter as string).includes(id)) {
       return true;
@@ -188,6 +189,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   institutionIsSelected(id: string): boolean {
     if (this.addonOptions.institutionsFilter === null
+      || (this.addonOptions.institutionsFilter as string) === undefined
       || (this.addonOptions.institutionsFilter as string).includes(id)) {
       return true;
     }
