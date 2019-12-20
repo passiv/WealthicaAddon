@@ -135,6 +135,10 @@ export class TradesNeededComponent implements OnInit {
       const promises = [];
       let count = 0;
 
+      if (this.positions.length === 0) {
+        resolve([]);
+      }
+
       this.positions.forEach(position => {
 
         if (WealthicaPosition.isCadPosition(position)) {

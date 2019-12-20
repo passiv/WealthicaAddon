@@ -69,13 +69,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   data: { portfolios: [, , ] },
     //   ...
     // }
-    console.log('options');
 
-    console.log(options);
     this.updateOptions(options);
-    console.log('this.addonOptions');
-
-    console.log(this.addonOptions);
 
     this.loadFromWealthica();
     const promises = [];
@@ -94,6 +89,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     Promise.all(promises).then(() => {
       this.tradesNeededComponent.positions = this.positions;
       this.tradesNeededComponent.filtersUpdated = true;
+      if (this.currentView === WidgetView.TradesNeeded) {
+        this.tradesNeededComponent.refreshTradesNeeded();
+      }
       this.tradesNeededComponent.detectChanges();
     });
   }
