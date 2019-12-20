@@ -96,6 +96,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.addonOptions === null) {
       this.addonOptions = options;
     } else {
+      if (options.data !== undefined && options.data !== null) {
+        this.addonOptions.data = options.data;
+      }
       if (options.investmentsFilter !== undefined && options.investmentsFilter !== null) {
         this.addonOptions.investmentsFilter = options.investmentsFilter;
       }
