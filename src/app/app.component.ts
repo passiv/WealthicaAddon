@@ -79,7 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.loadFromWealthica();
     const promises = [];
-    promises.push(this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
+    promises.push(this.addon.api.getPositions(this.getQueryFromOptions(this.addonOptions)).then(response => {
       this.positions = response as WealthicaPosition[];
       this.updateSharesOwned();
     }).catch((err) => {
