@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   cadToUsd = 0;
 
   addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
-  addonOptions;
+  addonOptions = null;
   positions: WealthicaPosition[] = null;
   wealthicaData: WealthicaData = null;
 
@@ -69,8 +69,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   data: { portfolios: [, , ] },
     //   ...
     // }
-    this.addonOptions = options;
-    console.log(options);
+    this.updateOptions(options);
+    console.log(this.addonOptions);
     this.loadFromWealthica();
     const promises = [];
     promises.push(this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
@@ -92,6 +92,28 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
+  updateOptions(options) {
+    if (this.addonOptions === null) {
+      this.addonOptions = options;
+    } else {
+      if (options.investmentsFilter !== undefined && options.investmentsFilter !== null) {
+        this.addonOptions.investmentsFilter = options.investmentsFilter;
+      }
+      if (options.institutionsFilter !== undefined && options.institutionsFilter !== null) {
+        this.addonOptions.institutionsFilter = options.institutionsFilter;
+      }
+      if (options.groupsFilter !== undefined && options.groupsFilter !== null) {
+        this.addonOptions.groupsFilter = options.groupsFilter;
+      }
+      if (options.assetsFilter !== undefined && options.assetsFilter !== null) {
+        this.addonOptions.assetsFilter = options.assetsFilter;
+      }
+      if (options.liabilitiesFilter !== undefined && options.liabilitiesFilter !== null) {
+        this.addonOptions.liabilitiesFilter = options.liabilitiesFilter;
+      }
+    }
+  }
+
   clearData() {
     this.tradesNeededComponent.cashCAD = 0;
     this.tradesNeededComponent.cashUSD = 0;
@@ -105,9 +127,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   loadFromWealthica() {
+    console.log('here');
     if (this.addonOptions !== null && this.addonOptions.data !== undefined
       && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
-        this.wealthicaData = (this.addonOptions.data as WealthicaData);
+      this.wealthicaData = (this.addonOptions.data as WealthicaData);
     }
     if (this.wealthicaData !== null && this.wealthicaData !== undefined) {
       this.portfolioOverviewComponent.portfolios = [];
