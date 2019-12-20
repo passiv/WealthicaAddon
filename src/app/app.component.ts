@@ -69,8 +69,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   data: { portfolios: [, , ] },
     //   ...
     // }
+    console.log('options');
+
+    console.log(options);
     this.updateOptions(options);
+    console.log('this.addonOptions');
+
     console.log(this.addonOptions);
+
     this.loadFromWealthica();
     const promises = [];
     promises.push(this.addon.api.getPositions(this.getQueryFromOptions(options)).then(response => {
@@ -130,7 +136,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   loadFromWealthica() {
-    console.log('here');
     if (this.addonOptions !== null && this.addonOptions.data !== undefined
       && this.addonOptions.data !== null && (this.addonOptions.data as WealthicaData) !== null) {
       this.wealthicaData = (this.addonOptions.data as WealthicaData);
