@@ -44,7 +44,39 @@ export class PortfolioOverviewComponent implements OnInit {
 
   onImportPortfolio() {
     this.portfolio = new PortfolioTemplate();
-    this.portfolio.portfolioName = 'Imported Portfolio';
+    const namesInUse: string[] = [];
+    this.portfolios.forEach(portfolio => {
+      namesInUse.push(portfolio.portfolioName);
+    });
+
+    if (!namesInUse.includes('Imported Portfolio')) {
+      this.portfolio.portfolioName = 'Imported Portfolio';
+    } else if (!namesInUse.includes('Imported Portfolio 2')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 2';
+    } else if (!namesInUse.includes('Imported Portfolio 3')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 3';
+    } else if (!namesInUse.includes('Imported Portfolio 4')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 4';
+    } else if (!namesInUse.includes('Imported Portfolio 4')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 4';
+    } else if (!namesInUse.includes('Imported Portfolio 5')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 5';
+    } else if (!namesInUse.includes('Imported Portfolio 6')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 6';
+    } else if (!namesInUse.includes('Imported Portfolio 7')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 7';
+    } else if (!namesInUse.includes('Imported Portfolio 8')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 8';
+    } else if (!namesInUse.includes('Imported Portfolio 9')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 9';
+    } else if (!namesInUse.includes('Imported Portfolio 10')) {
+      this.portfolio.portfolioName = 'Imported Portfolio 10';
+    } else {
+      this.portfolio.portfolioName = 'Another Imported Portfolio';
+    }
+
+
+
     this.portfolio.components = [];
     this.portfolios.push(this.portfolio);
     this.switchPortfolio.emit(this.portfolio);
