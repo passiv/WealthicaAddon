@@ -141,26 +141,36 @@ export class TradesNeededComponent implements OnInit {
 
       this.positions.forEach(position => {
 
-        if (WealthicaPosition.isCadPosition(position)) {
-          const request = new PassivSymbolRequest(position.security.symbol);
-          promises.push(this.passivService.search(request).subscribe(response => {
-            this.loadingText = 'Verifying ' + position.security.symbol + '...';
-            let symbol = position.security.symbol;
-            if (WealthicaSecurity.isCadSecurity(position)) {
-              const cadSymbol = PassivSymbol.getCadSymbolFromWealthica(symbol, response as PassivSymbol[]);
-              if (cadSymbol !== null) {
-                symbol = cadSymbol;
-              }
-            }
+        const request = new PassivSymbolRequest(position.security.symbol);
+        promises.push(this.passivService.search(request).subscribe(response => {
+          let toAdd = false;
+          this.loadingText = 'Verifying ' + position.security.symbol + '...';
+          let symbol = position.security.symbol;
 
+          if (WealthicaSecurity.isCadSecurity(position)) {
+            const cadSymbol = PassivSymbol.getCadSymbolFromWealthica(symbol, response as PassivSymbol[]);
+            if (cadSymbol !== null) {
+              symbol = cadSymbol;
+              toAdd = true;
+            }
+          } else {
+            (response as PassivSymbol[]).forEach(passivSymbol => {
+              if (position.security.symbol.trim().toLowerCase() === passivSymbol.symbol.trim().toLowerCase()) {
+                toAdd = true;
+              }
+            });
+          }
+
+          if (toAdd) {
             const passivPosition = new PassivPosition(symbol, position.quantity);
             positions.push(passivPosition);
-            count++;
-            if (count === this.positions.length) {
-              resolve(positions);
-            }
-          }));
-        }
+          }
+
+          count++;
+          if (count === this.positions.length) {
+            resolve(positions);
+          }
+        }));
       });
     });
     return positionPromise as Promise<PassivPosition[]>;
@@ -201,7 +211,7 @@ export class TradesNeededComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
- // Manual calculation of adjustment needed (before passiv api)
+  // Manual calculation of adjustment needed (before passiv api)
   // adjustmentNeeded(component: PortfolioComponent): string {
   //   if (component !== null) {
   //     const correctShares = (component.percentOfPortfolio * this.totalPortfolioValue()) / parseFloat(component.price);
