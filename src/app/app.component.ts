@@ -97,6 +97,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   updateOptions(options) {
+    console.log('options');
+    console.log(options);
     if (this.addonOptions === null) {
       this.addonOptions = options;
     } else {
