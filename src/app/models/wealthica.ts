@@ -37,6 +37,18 @@ export class WealthicaPosition {
       return false;
     }
   }
+
+  static positionHasSecurity(position) {
+    if (position === null || position === undefined) {
+      return false;
+    } else if (position.security === null || position.security === undefined) {
+      return false;
+    } else if (position.security.symbol === null || position.security.symbol === undefined) {
+      return false;
+    }
+
+    return true;
+  }
 }
 
 export class WealthicaSecurity {

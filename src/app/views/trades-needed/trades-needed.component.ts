@@ -141,7 +141,7 @@ export class TradesNeededComponent implements OnInit {
 
       this.positions.forEach(position => {
 
-        if (this.positionHasSecurity(position)) {
+        if (WealthicaPosition.positionHasSecurity(position)) {
           const request = new PassivSymbolRequest(position.security.symbol);
           promises.push(this.passivService.search(request).subscribe(response => {
             let toAdd = false;
@@ -189,18 +189,6 @@ export class TradesNeededComponent implements OnInit {
 
   detectChanges() {
     this.cdr.detectChanges();
-  }
-
-  positionHasSecurity(position) {
-    if (position === null || position === undefined) {
-      return false;
-    } else if (position.security === null || position.security === undefined) {
-      return false;
-    } else if (position.security.symbol === null || position.security.symbol === undefined) {
-      return false;
-    }
-
-    return true;
   }
 
   // Manual calculation of adjustment needed (before passiv api)

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   portfolio: PortfolioTemplate;
   cadToUsd = 0;
 
-  addon = new wealth.Addon(environment.production ? {id: 'passiv/passiv-lite'} : {});
+  addon = new wealth.Addon(environment.production ? { id: 'passiv/passiv-lite' } : {});
   addonOptions = null;
   positions: WealthicaPosition[] = null;
   wealthicaData: WealthicaData = null;
@@ -366,32 +366,34 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Make sure passiv can find the security before adding
     this.positions.forEach(position => {
       let addImportedSecurity = false;
-      let symbolToAdd = position.security.symbol;
-      const request = new PassivSymbolRequest(symbolToAdd);
-      promises.push(this.passivService.search(request).subscribe(response => {
-        if (WealthicaSecurity.isUsdSecurity(position)) {
-          if ((response as PassivSymbol[]).map(r => r.symbol).includes(symbolToAdd)) {
-            addImportedSecurity = true;
+      if (WealthicaPosition.positionHasSecurity(position)) {
+        let symbolToAdd = position.security.symbol;
+        const request = new PassivSymbolRequest(symbolToAdd);
+        promises.push(this.passivService.search(request).subscribe(response => {
+          if (WealthicaSecurity.isUsdSecurity(position)) {
+            if ((response as PassivSymbol[]).map(r => r.symbol).includes(symbolToAdd)) {
+              addImportedSecurity = true;
+            }
+          } else if (WealthicaSecurity.isCadSecurity(position)) {
+            symbolToAdd = PassivSymbol.getCadSymbolFromWealthica(symbolToAdd, response as PassivSymbol[]);
+            if (symbolToAdd !== null && !symbolToAdd.includes('.cn')) {
+              addImportedSecurity = true;
+            }
           }
-        } else if (WealthicaSecurity.isCadSecurity(position)) {
-          symbolToAdd = PassivSymbol.getCadSymbolFromWealthica(symbolToAdd, response as PassivSymbol[]);
-          if (symbolToAdd !== null && !symbolToAdd.includes('.cn')) {
-            addImportedSecurity = true;
+          if (addImportedSecurity) {
+            let percentOfTotal = position.market_value / totalPortfolioValueUSD;
+            if (WealthicaPosition.isCadPosition(position)) {
+              percentOfTotal = percentOfTotal * this.cadToUsdRate();
+            }
+            const component = new PortfolioComponent(
+              symbolToAdd,
+              percentOfTotal
+            );
+            component.displayPercent = parseFloat((percentOfTotal * 100).toFixed(2));
+            portfolio.components.push(component);
           }
-        }
-        if (addImportedSecurity) {
-          let percentOfTotal = position.market_value / totalPortfolioValueUSD;
-          if (WealthicaPosition.isCadPosition(position)) {
-            percentOfTotal = percentOfTotal * this.cadToUsdRate();
-          }
-          const component = new PortfolioComponent(
-            symbolToAdd,
-            percentOfTotal
-          );
-          component.displayPercent = parseFloat((percentOfTotal * 100).toFixed(2));
-          portfolio.components.push(component);
-        }
-      }));
+        }));
+      }
     });
     // Only want these to happen after above finishes
     Promise.all(promises).then(() => {
