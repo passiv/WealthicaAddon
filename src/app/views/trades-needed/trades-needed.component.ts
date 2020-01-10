@@ -172,6 +172,11 @@ export class TradesNeededComponent implements OnInit {
               resolve(positions);
             }
           }));
+        } else {
+            count++;
+            if (count === this.positions.length) {
+              resolve(positions);
+            }
         }
       });
     });
