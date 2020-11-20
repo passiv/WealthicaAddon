@@ -10,14 +10,14 @@ export class PassivService {
   constructor(private http: HttpClient) { }
 
   search(request: PassivSymbolRequest) {
-    return this.http.post('https://getpassiv.com/api/v1/symbols', request);
+    return this.http.post('https://passiv.com/api/v1/symbols', request);
   }
 
   getTrades(request: PassivTradeRequest) {
-    return this.http.post('https://getpassiv.com/api/v1/embeddedTrades', request);
+    return this.http.post('https://passiv.com/api/v1/embeddedTrades', request);
   }
 
   getCurrencies() {
-    return this.http.get('https://getpassiv.com/api/v1/currencies/rates');
+    return this.http.get('https://passiv.com/api/v1/currencies/rates');
   }
 }
